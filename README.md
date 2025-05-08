@@ -1,4 +1,3 @@
-# AppWebPage
 # Proyecto de Ingeniería Web II – 4to Año Ingeniería Informática
 
 Este es un proyecto desarrollado en el marco de la materia **Ingeniería Web II** perteneciente al 4to año de la carrera **Ingeniería Informática**. 
