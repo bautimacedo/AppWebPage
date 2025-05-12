@@ -1,0 +1,26 @@
+{
+  "name": "proyectoweb",
+  "version": "1.0.0",
+  "description": "Este es un proyecto desarrollado en el marco de la materia **Ingeniería Web II** perteneciente al 4to año de la carrera **Ingeniería Informática**.  El objetivo es aplicar los conceptos aprendidos durante la cursada para construir una aplicación web completa, funcional y con buenas prácticas de desarrollo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bautimacedo/AppWebPage.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bautimacedo/AppWebPage/issues"
+  },
+  "homepage": "https://github.com/bautimacedo/AppWebPage#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7"
+  }
+}
