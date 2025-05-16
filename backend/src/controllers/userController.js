@@ -1,15 +1,27 @@
 const User = require('../models/userModel');
 
-const registerUser = async (req, res) => {
+// Crear un usuario
+const createUser = async (req, res) => {
+  const { name, email, password } = req.body;
   try {
-    const { name, email, password } = req.body;
     const user = await User.create({ name, email, password });
-    res.status(201).json({ message: 'Usuario registrado exitosamente', user });
+    res.status(201).json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error al registrar el usuario', error });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Obtener todos los usuarios
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
-  registerUser,
+  createUser,
+  getUsers
 };
