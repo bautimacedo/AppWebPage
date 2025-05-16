@@ -35,31 +35,36 @@ sequelize.authenticate()
 const User = require('./models/userModel'); // Ajusta la ruta según dónde esté el modelo
 
 app.post('/register', async (req, res) => {
-  console.log('Datos recibidos:', req.body);
+    console.log('Datos recibidos:', req.body);
 
-  const { email, name, password } = req.body;
+    // Desestructurando todos los datos que recibís del formulario
+    const { name, lastname, email, password, rol, sector } = req.body;
 
-  if (!email || !name || !password) {
-    return res.status(400).json({ error: 'Faltan datos obligatorios' });
-  }
+    // Validación de datos
+    if (!name || !lastname || !email || !password || !rol || !sector) {
+        return res.status(400).json({ error: 'Faltan datos obligatorios' });
+    }
 
-  try {
-    // 🔥 Aquí sigue intentando crear con "username"
-    const newUser = await User.create({ email, name, password });
+    try {
+        const newUser = await User.create({ name, lastname, email, password, rol, sector });
 
-    res.json({
-      message: 'Usuario registrado correctamente',
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message || 'Error al guardar el usuario en la base de datos' });
-  }
+        res.json({
+            message: 'Usuario registrado correctamente',
+            user: {
+                id: newUser.id,
+                name: newUser.name,
+                lastname: newUser.lastname,
+                email: newUser.email,
+                rol: newUser.rol,
+                sector: newUser.sector
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al guardar el usuario en la base de datos' });
+    }
 });
+
 
 
 

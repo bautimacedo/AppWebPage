@@ -16,7 +16,19 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  lastname: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  rol: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  sector: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -26,8 +38,8 @@ const User = sequelize.define('User', {
     allowNull: false,
   }
 }, {
-  timestamps: false, // Evitamos createdAt y updatedAt automáticos
-  tableName: 'users' // Especificamos el nombre correcto de la tabla
+  timestamps: false,
+  tableName: 'users'
 });
 
 module.exports = User;
