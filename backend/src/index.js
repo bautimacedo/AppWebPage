@@ -5,7 +5,7 @@ const app = express();
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
 
-const PORT = 3000;
+const PORT = 3000; //http://localhost:3000
 
 // Middlewares
 app.use(express.json());
