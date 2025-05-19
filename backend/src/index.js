@@ -71,11 +71,11 @@ app.post('/register', async (req, res) => {
 
 // Ruta de login (POST /login)
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
     // Buscar el usuario por nombre
-    const query = 'SELECT * FROM users WHERE username = $1';
-    const result = await pool.query(query, [username]);
+    const query = 'SELECT * FROM users WHERE mail = $1';
+    const result = await pool.query(query, [mail]);
 
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
     }
 
     // Login exitoso
-    res.json({ message: `Usuario ${username} logueado correctamente` });
+    res.json({ message: `Usuario ${mail} logueado correctamente` });
 
   } catch (error) {
     console.error('Error en /login:', error);
