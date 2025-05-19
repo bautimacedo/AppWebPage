@@ -70,9 +70,38 @@ app.post('/register', async (req, res) => {
 
 
 // Ruta de login (POST /login)
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  // Acá validarías usuario y contraseña con la DB
-  res.json({ message: `Usuario ${username} logueado correctamente` });
-});
+  try {
+    // Buscar el usuario por nombre
+    const query = 'SELECT * FROM users WHERE username = $1';
+    const result = await pool.query(query, [username]);
 
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Usuario no encontrado' });
+    }
+
+    const user = result.rows[0];
+
+    // Comparar contraseña ingresada con la almacenada
+    const passwordValida = await bcrypt.compare(password, user.password);
+
+    if (!passwordValida) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+
+    // Login exitoso
+    res.json({ message: `Usuario ${username} logueado correctamente` });
+
+  } catch (error) {
+    console.error('Error en /login:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+
+
+});
