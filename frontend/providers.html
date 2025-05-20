@@ -96,4 +96,26 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modal de contacto -->
+<div id="contactModal" class="modal-contact d-none">
+  <div class="modal-content-contact p-4 rounded-4 shadow-lg">
+    <h3 class="mb-3 text-center">Contactar proveedor</h3>
+    <form id="contactForm">
+      <div class="mb-3">
+        <label for="emailInput" class="form-label">Tu Email</label>
+        <input type="email" class="form-control" id="emailInput" placeholder="tuemail@example.com" required />
+      </div>
+      <div class="mb-3">
+        <label for="messageInput" class="form-label">Mensaje</label>
+        <textarea class="form-control" id="messageInput" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
+      </div>
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" id="closeModalBtn">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </body>
