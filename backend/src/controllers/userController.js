@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-const pool = require('../db'); // tu conexión a PostgreSQL
+const pool = require('../config/database'); // tu conexión a PostgreSQL
 
 // Crear un usuario
 const createUser = async (req, res) => {

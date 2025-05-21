@@ -17,7 +17,9 @@
 
       if (response.ok) {
         alert(data.message);
+        localStorage.setItem('token', data.token); // <-- guardás el token
         window.location.href = '/frontend/home.html';
+        
       } else {
         alert(data.error || 'Error en el login');
       }

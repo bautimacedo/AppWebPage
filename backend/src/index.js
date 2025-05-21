@@ -75,33 +75,67 @@ app.post('/register', async (req, res) => {
 
 
 // Ruta de login (POST /login)
+const jwt = require('jsonwebtoken');
+
 app.post('/login', async (req, res) => {
-  console.log('Login - req.body:', req.body);  // <<-- debug para ver qué llega
+  console.log('Login - req.body:', req.body);
 
   const { email, password } = req.body;
 
   try {
-    // Buscar usuario por email
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
     }
-    console.log('Password recibida:', password);
-    console.log('Hash guardado en DB:', user.password);
-    // Comparar contraseña ingresada con la guardada
-    const passwordValida = await bcrypt.compare(password, user.password);
-    console.log('Resultado bcrypt.compare:', passwordValida);
 
-    
+    const passwordValida = await bcrypt.compare(password, user.password);
+
     if (!passwordValida) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    res.json({ message: `Usuario ${user.email} logueado correctamente` });
+    // Generar token JWT con payload básico (por ejemplo id y email)
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,  // tu secreto en .env
+      { expiresIn: '1d' }  // duración del token (1 día)
+    );
+
+    // Devolver token al cliente
+    res.json({ 
+      message: `Usuario ${user.email} logueado correctamente`,
+      token
+    });
 
   } catch (error) {
     console.error('Error en /login:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+app.get('/profile', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+// Middleware para autenticar el token JWT
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del header
+
+  if (!token) return res.sendStatus(401); // Si no hay token, no autorizado
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Token inválido
+    req.user = user; // Guardar la información del usuario en la request
+    next(); // Continuar con la siguiente función middleware
+  });
+}
+
