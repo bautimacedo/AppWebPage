@@ -114,6 +114,55 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.put('/api/users/:id', authenticateToken, async (req, res) => {
+  const userId = req.params.id;
+  const { name, lastname, email, password, rol, sector } = req.body;
+
+  try {
+    // Buscar usuario por id
+    const user = await User.findByPk(userId);
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    // Opcional: verificar que el usuario que hace la petición sea el mismo o tenga permisos
+    if (req.user.id !== user.id) {
+      return res.status(403).json({ error: 'No tienes permisos para actualizar este usuario' });
+    }
+
+    // Hashear contraseña si se envía
+    let hashedPassword = user.password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    // Actualizar usuario con los datos recibidos (si no vienen, mantiene los actuales)
+    await user.update({
+      name: name ?? user.name,
+      lastname: lastname ?? user.lastname,
+      email: email ?? user.email,
+      password: hashedPassword,
+      rol: rol ?? user.rol,
+      sector: sector ?? user.sector
+    });
+
+    res.json({
+      message: 'Usuario actualizado correctamente',
+      user: {
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+        rol: user.rol,
+        sector: user.sector
+      }
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar el usuario' });
+  }
+});
+// Ruta para obtener el perfil del usuario autenticado
+
 app.get('/profile', authenticateToken, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
