@@ -6,6 +6,7 @@ const sequelize = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
 const User = require('./models/userModel'); // Ajusta la ruta según dónde esté el modelo
 const bcrypt = require('bcrypt');
+const productRoutes = require('./routes/productRoutes');
 
 const PORT = 3000; //http://localhost:3000
 
@@ -18,6 +19,8 @@ app.use(express.json()); // Para parsear JSON automáticamente
 
 // Rutas
 app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+
 
 // Conexión a la DB
 sequelize.authenticate()
