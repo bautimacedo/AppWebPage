@@ -4,6 +4,8 @@ const cors = require('cors');
 const app = express();
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
+const User = require('./models/userModel'); // Ajusta la ruta según dónde esté el modelo
+const bcrypt = require('bcrypt');
 
 const PORT = 3000; //http://localhost:3000
 
@@ -32,7 +34,7 @@ sequelize.authenticate()
   app.get('/', (req, res) => {
   res.send('Backend funcionando correctamente');
 });
-const User = require('./models/userModel'); // Ajusta la ruta según dónde esté el modelo
+
 
 app.post('/register', async (req, res) => {
     console.log('Datos recibidos:', req.body);
@@ -46,7 +48,10 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-        const newUser = await User.create({ name, lastname, email, password, rol, sector });
+
+        const hashedPassword = await bcrypt.hash(password, 10); // se hashea la contraseña y 10 es el salt rounds
+
+        const newUser = await User.create({ name, lastname, email, password: hashedPassword, rol, sector });
 
         res.json({
             message: 'Usuario registrado correctamente',
@@ -71,37 +76,32 @@ app.post('/register', async (req, res) => {
 
 // Ruta de login (POST /login)
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    // Buscar el usuario por nombre
-    const query = 'SELECT * FROM users WHERE mail = $1';
-    const result = await pool.query(query, [mail]);
+  console.log('Login - req.body:', req.body);  // <<-- debug para ver qué llega
 
-    if (result.rows.length === 0) {
+  const { email, password } = req.body;
+
+  try {
+    // Buscar usuario por email
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
       return res.status(401).json({ error: 'Usuario no encontrado' });
     }
-
-    const user = result.rows[0];
-
-    // Comparar contraseña ingresada con la almacenada
+    console.log('Password recibida:', password);
+    console.log('Hash guardado en DB:', user.password);
+    // Comparar contraseña ingresada con la guardada
     const passwordValida = await bcrypt.compare(password, user.password);
+    console.log('Resultado bcrypt.compare:', passwordValida);
 
+    
     if (!passwordValida) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    // Login exitoso
-    res.json({ message: `Usuario ${mail} logueado correctamente` });
+    res.json({ message: `Usuario ${user.email} logueado correctamente` });
 
   } catch (error) {
     console.error('Error en /login:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
-
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  });
-
-
 });

@@ -17,12 +17,12 @@
         <div class="container d-flex align-items-center justify-content-center "style="margin-top: 5%;">
             <div class="row justify-content-center w-100">
                 <div class="col-md-4">
-                    <form action="/home.html" method="POST" class="p-4 rounded shadow-sm d-flex flex-column justify-content-between" style="background-color: #ffffff; min-height: 500px;">
+                    <form id ="loginForm" method="POST" class="p-4 rounded shadow-sm d-flex flex-column justify-content-between" style="background-color: #ffffff; min-height: 500px;">
                         <div>
                             <h2 class="text-center mb-4">Login</h2>
                             <div class="mb-4">
-                                <label for="username" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="mb-4">
                                 <label for="password" class="form-label">Password</label>
@@ -36,12 +36,13 @@
                             </div>
 
                             <button class="btn-login" type="submit">Login</button>
+                            
                         </div>
                         
                         <!-- Enlaces debajo del botón -->
                       
                             <p class="register-login">Dont have an account?
-                                <a href="/register.html" style="color: #3E2C1C;">Sign Up</a>
+                                <a href="/frontend/register.html" style="color: #3E2C1C;">Sign Up</a>
                             </p>
                             
                         </div>
