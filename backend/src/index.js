@@ -7,6 +7,8 @@ const userRoutes = require('./routes/userRoutes');
 const User = require('./models/userModel'); // Ajusta la ruta según dónde esté el modelo
 const bcrypt = require('bcrypt');
 const productRoutes = require('./routes/productRoutes');
+const { authenticateToken } = require('./middlewares/authMiddleware');
+
 
 const PORT = 3000; //http://localhost:3000
 
