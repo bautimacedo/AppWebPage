@@ -9,7 +9,6 @@ const { authenticateToken } = require('../middlewares/authMiddleware'); // Cream
 console.log('Middleware importado:', require('../middlewares/authMiddleware'));
 // Debe mostrar { authenticateToken: [Function] } o { authMiddleware: [Function] }
 // Crear producto (requiere token)
->>>>>>> 4ccafddbdacbfbb9b559a0e48d48906bf041545a
 router.post('/', authenticateToken, async (req, res) => {
   const { name, price, description } = req.body;
   if (!name || !price) return res.status(400).json({ error: 'Nombre y precio son obligatorios' });
