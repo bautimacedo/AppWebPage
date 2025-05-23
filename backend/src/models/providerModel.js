@@ -17,6 +17,10 @@ const Provider = sequelize.define('Provider', {
   tableName: 'providers'
 });
 
+const Product = require('./productModel'); // Importar el modelo Product
+
+
+
 // Definir relación: Un proveedor tiene muchos productos
 //Provider.hasMany(Product, { foreignKey: 'providerId' });
 

@@ -1,39 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/productModel');
-const { authenticateToken } = require('../middlewares/authMiddleware'); // Creamos un middleware aparte para reusar
-// Agrega esto temporalmente en productRoutes.js para debuggear
-console.log('Middleware importado:', require('../middlewares/authMiddleware'));
-// Debe mostrar { authenticateToken: [Function] } o { authMiddleware: [Function] }
+const Provider = require('../models/providerModel');
+const { authenticateToken } = require('../middlewares/authMiddleware');
+
 // Crear producto (requiere token)
 router.post('/', authenticateToken, async (req, res) => {
-  const { name, price, description } = req.body;
-  if (!name || !price) return res.status(400).json({ error: 'Nombre y precio son obligatorios' });
+  const { name, price, description, providerId } = req.body;
+
+  if (!name || !price || !providerId) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios: name, price o providerId' });
+  }
 
   try {
+    const provider = await Provider.findByPk(providerId);
+    if (!provider) {
+      return res.status(404).json({ error: 'Proveedor no encontrado' });
+    }
+
     const newProduct = await Product.create({
       name,
       price,
       description,
-      userId: req.user.id, // Se asocia el producto al usuario logueado
+      providerId
     });
+
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error(error);
+    console.error('Error al crear producto:', error);
     res.status(500).json({ error: 'Error al crear el producto' });
   }
 });
 
-// Listar productos del usuario logueado
-router.get('/', authenticateToken, async (req, res) => {
+// Listar todos los productos
+router.get('/', async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { userId: req.user.id },
-      order: [['createdAt', 'DESC']],
+      include: [{ model: Provider, as: 'provider' }],
+      order: [['id', 'DESC']],
     });
     res.json(products);
   } catch (error) {
-    console.error(error);
+    console.error('Error al obtener productos:', error);
     res.status(500).json({ error: 'Error al obtener productos' });
   }
 });
