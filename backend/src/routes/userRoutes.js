@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { createUser, getUsers, updateUser } = require('../controllers/userController');
-const { authenticateToken } = require('../middlewares/authMiddleware'); // suponiendo que tengas middleware separado
+const { authenticateToken } = require('../middlewares/authMiddleware');
 
+// Rutas de usuarios
 router.post('/', createUser);
 router.get('/', getUsers);
-
-router.post('/', productController.createProduct);
 router.put('/:id', authenticateToken, updateUser);
 
 module.exports = router;

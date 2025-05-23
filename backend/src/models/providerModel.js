@@ -18,6 +18,6 @@ const Provider = sequelize.define('Provider', {
 });
 
 // Definir relación: Un proveedor tiene muchos productos
-Provider.hasMany(Product, { foreignKey: 'providerId' });
+//Provider.hasMany(Product, { foreignKey: 'providerId' });
 
 module.exports = Provider;
