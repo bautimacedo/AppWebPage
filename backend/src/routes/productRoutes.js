@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/productModel');
 const { authenticateToken } = require('../middlewares/authMiddleware'); // Creamos un middleware aparte para reusar
-
+// Agrega esto temporalmente en productRoutes.js para debuggear
+console.log('Middleware importado:', require('../middlewares/authMiddleware'));
+// Debe mostrar { authenticateToken: [Function] } o { authMiddleware: [Function] }
 // Crear producto (requiere token)
 router.post('/', authenticateToken, async (req, res) => {
   const { name, price, description } = req.body;

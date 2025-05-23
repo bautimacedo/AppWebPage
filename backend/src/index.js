@@ -37,7 +37,9 @@ sequelize.authenticate()
   app.get('/', (req, res) => {
   res.send('Backend funcionando correctamente');
 });
-
+// Después de conectar a la base de datos:
+const setupAssociations = require('./models/associations');
+setupAssociations();
 
 app.post('/register', async (req, res) => {
     console.log('Datos recibidos:', req.body);

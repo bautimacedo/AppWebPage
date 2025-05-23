@@ -40,8 +40,38 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
+
+const updateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, email, password } = req.body;
+
+    const updateData = { name, email };
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
+    }
+
+    const [updated] = await User.update(updateData, {
+      where: { id: userId }
+    });
+
+    if (updated) {
+      const updatedUser = await User.findByPk(userId);
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar el usuario' });
+  }
+};
+
+
 module.exports = {
   createUser,
   getUsers,
-  getUserByEmail
+  getUserByEmail,
+  updateUser,
 };

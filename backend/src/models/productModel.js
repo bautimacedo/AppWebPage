@@ -21,6 +21,6 @@ const Product = sequelize.define('Product', {
 });
 
 // Cada producto pertenece a un proveedor
-Product.belongsTo(Provider, { foreignKey: 'providerId' });
+//Product.belongsTo(Provider, { foreignKey: 'providerId' });
 
 module.exports = Product;
