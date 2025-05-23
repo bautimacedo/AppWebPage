@@ -1,13 +1,10 @@
-
-
-// Crear producto
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/productModel');
-const { authenticateToken } = require('../middlewares/authMiddleware'); // Creamos un middleware aparte para reusar
-// Agrega esto temporalmente en productRoutes.js para debuggear
-console.log('Middleware importado:', require('../middlewares/authMiddleware'));
-// Debe mostrar { authenticateToken: [Function] } o { authMiddleware: [Function] }
+const { authenticateToken } = require('../middlewares/authMiddleware');
+
+console.log('Middleware importado:', require('../middlewares/authMiddleware')); // Esto es para debug
+
 // Crear producto (requiere token)
 router.post('/', authenticateToken, async (req, res) => {
   const { name, price, description } = req.body;
@@ -41,5 +38,4 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-//JWT Es JSON Web Token: Es una forma de asegurar de 
-// identificar un usuario entre el front y el back
+module.exports = router;
