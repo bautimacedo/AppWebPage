@@ -1,9 +1,4 @@
-const express = require('express');
-const router = express.Router();
-const Product = require('../models/productModel');
-const { authenticateToken } = require('../middlewares/authMiddleware'); // Creamos un middleware aparte para reusar
-
-// Crear producto (requiere token)
+// Crear producto
 router.post('/', authenticateToken, async (req, res) => {
   const { name, price, description } = req.body;
   if (!name || !price) return res.status(400).json({ error: 'Nombre y precio son obligatorios' });
@@ -13,7 +8,7 @@ router.post('/', authenticateToken, async (req, res) => {
       name,
       price,
       description,
-      userId: req.user.id, // Se asocia el producto al usuario logueado
+      providerId: req.user.id, // 👈 Usamos el ID del proveedor autenticado
     });
     res.status(201).json(newProduct);
   } catch (error) {
@@ -22,12 +17,12 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-// Listar productos del usuario logueado
+// Listar productos del proveedor autenticado
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { userId: req.user.id },
-      order: [['createdAt', 'DESC']],
+      where: { providerId: req.user.id },
+      order: [['id', 'DESC']],
     });
     res.json(products);
   } catch (error) {
@@ -36,4 +31,5 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+//JWT Es JSON Web Token: Es una forma de asegurar de 
+// identificar un usuario entre el front y el back
