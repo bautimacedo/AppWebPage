@@ -17,7 +17,6 @@ const Provider = sequelize.define('Provider', {
   tableName: 'providers'
 });
 
-const Product = require('./productModel'); // Importar el modelo Product
 
 
 

@@ -25,9 +25,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
         </ul>
       </div>
     </div>
@@ -98,5 +98,52 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  async function loadMyProducts() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No estás autenticado');
+
+      const res = await fetch('/api/products/my-products', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        alert('Error al cargar productos: ' + (error.error || res.statusText));
+        return;
+      }
+
+      const products = await res.json();
+      const container = document.querySelector('.row.justify-content-center');
+      container.innerHTML = ''; // limpiar productos actuales
+
+      products.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'card mb-3 col-md-8';
+        card.innerHTML = `
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="card-title mb-1">${prod.name}</h5>
+              <p class="card-text text-muted mb-0">${prod.description || ''}</p>
+            </div>
+            <a href="editarProducto.html?id=${prod.id}" class="btn btn-outline-primary">
+              <i class="bi bi-pencil-square"></i> Edit
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  // Cargar productos al abrir la página
+  window.addEventListener('DOMContentLoaded', loadMyProducts);
+</script>
+
+
+
 </body>
 </html>
