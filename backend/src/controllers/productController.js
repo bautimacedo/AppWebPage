@@ -1,25 +1,20 @@
-// controllers/productController.js
-const Product = require('../models/productModel');
+const Product = require('../models/Product');
 
-exports.createProduct = async (req, res) => {
+const createProduct = async (req, res) => {
   try {
     const { name, price, description } = req.body;
-    const providerId = req.user.id; // Supongamos que el proveedor está logueado y su id viene en req.user
+    // Si usas token y pusiste userId ahí, lo sacás del token (req.user)
+    const userId = req.user.id; 
 
-    if (!name || !price) {
-      return res.status(400).json({ message: 'Name and price are required' });
-    }
+    // Crear producto
+    const product = await Product.create({ name, price, description, userId });
 
-    const newProduct = await Product.create({
-      name,
-      price,
-      description,
-      providerId,  // Asociamos el producto con el proveedor logueado
-    });
-
-    res.status(201).json(newProduct);
+    res.status(201).json(product);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error creating product' });
+    res.status(500).json({ error: error.message });
   }
+};
+
+module.exports = {
+  createProduct
 };

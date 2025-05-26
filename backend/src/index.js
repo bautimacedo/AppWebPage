@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt');
 const app = express();
 const sequelize = require('./config/database');
 const User = require('./models/userModel');
-const Provider = require('./models/providerModel');
-
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const profileRoutes = require('./routes/profileRoutes'); // Importamos perfil
