@@ -33,7 +33,7 @@ console.log('TOKEN DESDE HOME:', localStorage.getItem('token'));
 
       const a = document.createElement('a');
       a.className = 'nav-link';
-      a.href = '/frontend/panelProveedor.html';
+      a.href = '/frontend/screenProviders/providerPanel.html'; // Asegúrate de que esta ruta exista
       a.textContent = 'Provider Panel';
 
       li.appendChild(a);

@@ -77,8 +77,6 @@ app.post('/register', async (req, res) => {
 
 // Login usuarios
 app.post('/login', async (req, res) => {
-  console.log('Login - req.body:', req.body);
-
   const { email, password } = req.body;
 
   try {
@@ -95,14 +93,20 @@ app.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, rol: user.rol },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
     res.json({
       message: `Usuario ${user.email} logueado correctamente`,
-      token
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        rol: user.rol
+      }
     });
   } catch (error) {
     console.error('Error en /login:', error);
@@ -110,36 +114,8 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Login proveedores
-app.post('/login-provider', async (req, res) => {
-  const { email, password } = req.body;
 
-  try {
-    const provider = await Provider.findOne({ where: { email } });
-    if (!provider) {
-      return res.status(401).json({ error: 'Proveedor no encontrado' });
-    }
 
-    const validPassword = await bcrypt.compare(password, provider.password);
-    if (!validPassword) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' });
-    }
-
-    const token = jwt.sign(
-      { providerId: provider.id, email: provider.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-
-    res.json({
-      message: `Proveedor ${provider.email} autenticado correctamente`,
-      token
-    });
-  } catch (error) {
-    console.error('Error en /login-provider:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
 
 // Actualizar usuario (requiere token)
 const { authenticateToken } = require('./middlewares/authMiddleware'); // Importa tu middleware de auth

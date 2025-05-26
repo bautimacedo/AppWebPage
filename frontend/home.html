@@ -132,60 +132,8 @@
     </div>
   </footer>
 
-
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    window.location.href = '/frontend/login.html';
-    return;
-  }
-
-  try {
-    // Traer usuario con token del backend
-    const response = await fetch('http://localhost:3000/profile', {
-      headers: {
-        'Authorization': 'Bearer ' + token
-      }
-    });
-
-    if (!response.ok) {
-      // Token inválido o expirado
-      localStorage.removeItem('token');
-      window.location.href = '/frontend/login.html';
-      return;
-    }
-
-    const user = await response.json();
-
-    // Mostrar link Panel Proveedor solo si es proveedor
-    if (user.rol === 'proveedor') {
-      const nav = document.querySelector('.navbar-nav');
-      const li = document.createElement('li');
-      li.className = 'nav-item';
-      const a = document.createElement('a');
-      a.className = 'nav-link';
-      a.href = '/frontend/screenProviders/panelProvider.html';
-      a.textContent = 'Provider Panel';
-      li.appendChild(a);
-
-      // Insertar antes de Settings
-      const settingsItem = nav.querySelector('a[href="#"]')?.closest('li');
-      if (settingsItem) {
-        nav.insertBefore(li, settingsItem);
-      } else {
-        nav.appendChild(li);
-      }
-    }
-  } catch (error) {
-    console.error('Error al obtener los datos del usuario:', error);
-    localStorage.removeItem('token');
-    window.location.href = '/frontend/login.html';
-  }
-});
-
-</script>
-
+  <script src ="homeJS.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
 </body>
 </html>
