@@ -24,9 +24,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
         </ul>
       </div>
     </div>
@@ -81,29 +81,49 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // Aquí podrías agregar la lógica para enviar el formulario al backend
-    document.getElementById('addProductForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+  document.getElementById('addProductForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-      const productData = {
-        name: this.productName.value.trim(),
-        price: parseFloat(this.productPrice.value),
-        description: this.productDescription.value.trim(),
-      };
+    const productData = {
+      name: this.productName.value.trim(),
+      price: parseFloat(this.productPrice.value),
+      description: this.productDescription.value.trim(),
+    };
 
-      console.log('Producto a crear:', productData);
+    try {
+      const token = localStorage.getItem('token'); // o donde guardes el JWT
+      if (!token) throw new Error('No estás autenticado');
 
-      // Aquí iría la llamada fetch/axios para enviar productData al backend
-      // Por ejemplo:
-      // fetch('/api/products', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(productData)
-      // }).then(...)
+      const response = await fetch('http://localhost:3000/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(productData)
+      });
 
-      alert('Producto creado (simulado)');
+      const text = await response.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (err) {
+        console.error('No se pudo parsear JSON:', err);
+        data = {};
+      }
+
+      if (!response.ok) {
+        alert('Error: ' + (data.error || 'No se pudo crear el producto'));
+        return;
+      }
+
+      alert('Producto creado: ' + (data.name || ''));
       this.reset();
-    });
+
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  });
   </script>
 </body>
 </html>
