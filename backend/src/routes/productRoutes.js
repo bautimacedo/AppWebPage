@@ -1,16 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/productModel');
-<<<<<<< HEAD
-const { authenticateToken } = require('../middlewares/authMiddleware');
-
-console.log('Middleware importado:', require('../middlewares/authMiddleware')); // Esto es para debug
-
-=======
 const Provider = require('../models/providerModel');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 
->>>>>>> c96dcf4c07aa54d61035c7590566473299b94f29
 // Crear producto (requiere token)
 router.post('/', authenticateToken, async (req, res) => {
   const { name, price, description } = req.body;
@@ -35,11 +28,7 @@ router.post('/', authenticateToken, async (req, res) => {
       name,
       price,
       description,
-<<<<<<< HEAD
-      providerId: req.user.id, // 👈 Usamos el ID del proveedor autenticado
-=======
       providerId,
->>>>>>> c96dcf4c07aa54d61035c7590566473299b94f29
     });
 
     res.status(201).json(newProduct);
@@ -48,20 +37,11 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Error al crear el producto' });
   }
 });
-<<<<<<< HEAD
-
-// Listar productos del proveedor autenticado
-router.get('/', authenticateToken, async (req, res) => {
-  try {
-    const products = await Product.findAll({
-      where: { providerId: req.user.id },
-=======
 // Listar todos los productos
 router.get('/', async (req, res) => {
   try {
     const products = await Product.findAll({
       include: [{ model: Provider, as: 'provider' }],
->>>>>>> c96dcf4c07aa54d61035c7590566473299b94f29
       order: [['id', 'DESC']],
     });
     res.json(products);
