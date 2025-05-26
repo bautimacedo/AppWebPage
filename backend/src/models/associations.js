@@ -1,18 +1,18 @@
 // models/associations.js
-const Provider = require('./providerModel');
 const Product = require('./productModel');
+const User = require('./userModel');
 
 function setupAssociations() {
   // Un proveedor tiene muchos productos
-  Provider.hasMany(Product, {
-    foreignKey: 'providerId',
+  User.hasMany(Product, {
+    foreignKey: 'userId',
     as: 'products'
   });
   
   // Un producto pertenece a un proveedor
-  Product.belongsTo(Provider, {
-    foreignKey: 'providerId',
-    as: 'provider'
+  Product.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user'
   });
 }
 

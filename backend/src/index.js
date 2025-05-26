@@ -5,24 +5,46 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const app = express();
 const sequelize = require('./config/database');
-const User = require('./models/userModel');
-const Provider = require('./models/providerModel');
 
+//Definimos Roles
+const User = require('./models/userModel');
+const Admin = require('./models/adminModel');
+
+//Definimos Rutas
+const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
-const profileRoutes = require('./routes/profileRoutes'); // Importamos perfil
+const profileRoutes = require('./routes/profileRoutes'); 
 
 const PORT = 3000; // http://localhost:3000
+
+const { authenticateToken } = require('./middlewares/authMiddleware'); // Importa tu middleware de auth
+const { authenticateAdminToken } = require('./middlewares/authAdminMiddleware');
+
+
+const authAdminMiddleware = require('./middlewares/authAdminMiddleware');
+console.log('authAdminMiddleware:', authAdminMiddleware);
 
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+console.log('authenticateAdminToken es función?', typeof authenticateAdminToken === 'function');
+console.log('adminRoutes es router?', typeof adminRoutes === 'function');
+
+console.log('adminRoutes:', adminRoutes);
+console.log('typeof adminRoutes:', typeof adminRoutes);
+
+
 // Rutas
+app.use('/api/admin', adminRoutes); 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-app.use('/', profileRoutes); // Montamos las rutas de perfil (usa /profile)
+app.use('/', profileRoutes); 
+
+const adminRoutess = require('./routes/adminRoutes');
+console.log('adminRoutes:', adminRoutess);
 
 // Conexión a la DB
 sequelize.authenticate()
@@ -77,6 +99,8 @@ app.post('/register', async (req, res) => {
 
 // Login usuarios
 app.post('/login', async (req, res) => {
+  console.log('Login - req.body:', req.body);
+
   const { email, password } = req.body;
 
   try {
@@ -93,20 +117,14 @@ app.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, rol: user.rol },
+      { id: user.id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
     res.json({
       message: `Usuario ${user.email} logueado correctamente`,
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        rol: user.rol
-      }
+      token
     });
   } catch (error) {
     console.error('Error en /login:', error);
@@ -115,10 +133,34 @@ app.post('/login', async (req, res) => {
 });
 
 
+//Login Admin
+app.post('/login-admin', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const admin = await Admin.findOne({ where: { email } });
+    if (!admin) return res.status(401).json({ error: 'Admin no encontrado' });
+
+    const validPass = await bcrypt.compare(password, admin.password);
+    if (!validPass) return res.status(401).json({ error: 'Contraseña incorrecta' });
+
+    const token = jwt.sign(
+      { id: admin.id, email: admin.email },
+      process.env.JWT_ADMIN_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.json({ message: 'Admin autenticado correctamente', token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno servidor' });
+  }
+});
+
 
 
 // Actualizar usuario (requiere token)
-const { authenticateToken } = require('./middlewares/authMiddleware'); // Importa tu middleware de auth
+
+
 
 app.put('/api/users/:id', authenticateToken, async (req, res) => {
   const userId = req.params.id;

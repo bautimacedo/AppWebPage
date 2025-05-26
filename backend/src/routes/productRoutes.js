@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/productModel');
-const Provider = require('../models/providerModel');
 const { authenticateToken } = require('../middlewares/authMiddleware');
+const User = require('../models/userModel');
 
 // Crear producto (requiere token)
 router.post('/', authenticateToken, async (req, res) => {
   const { name, price, description } = req.body;
 
   // Asegurarse que quien crea sea un proveedor
-  const providerId = req.user?.providerId;
-  if (!providerId) {
+  if (req.user.rol !== 'proveedor') {
     return res.status(403).json({ error: 'Solo proveedores pueden crear productos' });
   }
 
@@ -19,16 +18,11 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 
   try {
-    const provider = await Provider.findByPk(providerId);
-    if (!provider) {
-      return res.status(404).json({ error: 'Proveedor no encontrado' });
-    }
-
     const newProduct = await Product.create({
       name,
       price,
       description,
-      providerId,
+      userId: req.user.id,
     });
 
     res.status(201).json(newProduct);
@@ -37,11 +31,12 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Error al crear el producto' });
   }
 });
-// Listar todos los productos
+
+// Listar todos los productos (incluye info del proveedor)
 router.get('/', async (req, res) => {
   try {
     const products = await Product.findAll({
-      include: [{ model: Provider, as: 'provider' }],
+      include: [{ model: User, as: 'user', attributes: ['id', 'name', 'email', 'rol'] }],
       order: [['id', 'DESC']],
     });
     res.json(products);
@@ -51,17 +46,15 @@ router.get('/', async (req, res) => {
   }
 });
 
-
 // Listar productos del proveedor autenticado
 router.get('/my-products', authenticateToken, async (req, res) => {
-  const providerId = req.user?.providerId;
-  if (!providerId) {
+  if (req.user.rol !== 'proveedor') {
     return res.status(403).json({ error: 'Solo proveedores pueden ver sus productos' });
   }
 
   try {
     const products = await Product.findAll({
-      where: { providerId },
+      where: { userId: req.user.id },
       order: [['id', 'DESC']],
     });
 
@@ -71,7 +64,5 @@ router.get('/my-products', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Error al obtener productos del proveedor' });
   }
 });
-
-
 
 module.exports = router;
