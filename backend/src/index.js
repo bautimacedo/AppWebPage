@@ -1,28 +1,28 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const app = express();
 const sequelize = require('./config/database');
+const User = require('./models/userModel');
+const Provider = require('./models/providerModel');
+
 const userRoutes = require('./routes/userRoutes');
-const User = require('./models/userModel'); // Ajusta la ruta según dónde esté el modelo
-const bcrypt = require('bcrypt');
 const productRoutes = require('./routes/productRoutes');
-const { authenticateToken } = require('./middlewares/authMiddleware');
+const profileRoutes = require('./routes/profileRoutes'); // Importamos perfil
 
-
-const PORT = 3000; //http://localhost:3000
+const PORT = 3000; // http://localhost:3000
 
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(cors()); // Permite CORS para todas las rutas y orígenes
-app.use(express.json()); // Para parsear JSON automáticamente
+app.use(cors());
 
 // Rutas
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-
+app.use('/', profileRoutes); // Montamos las rutas de perfil (usa /profile)
 
 // Conexión a la DB
 sequelize.authenticate()
@@ -36,54 +36,46 @@ sequelize.authenticate()
     console.error('❌ Error al conectar con la base de datos:', error.message);
   });
 
-  app.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Backend funcionando correctamente');
 });
+
 // Después de conectar a la base de datos:
 const setupAssociations = require('./models/associations');
 setupAssociations();
 
+// Registro de usuario
 app.post('/register', async (req, res) => {
-    console.log('Datos recibidos:', req.body);
+  console.log('Datos recibidos:', req.body);
+  const { name, lastname, email, password, rol, sector } = req.body;
 
-    // Desestructurando todos los datos que recibís del formulario
-    const { name, lastname, email, password, rol, sector } = req.body;
+  if (!name || !lastname || !email || !password || !rol || !sector) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios' });
+  }
 
-    // Validación de datos
-    if (!name || !lastname || !email || !password || !rol || !sector) {
-        return res.status(400).json({ error: 'Faltan datos obligatorios' });
-    }
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    try {
+    const newUser = await User.create({ name, lastname, email, password: hashedPassword, rol, sector });
 
-        const hashedPassword = await bcrypt.hash(password, 10); // se hashea la contraseña y 10 es el salt rounds
-
-        const newUser = await User.create({ name, lastname, email, password: hashedPassword, rol, sector });
-
-        res.json({
-            message: 'Usuario registrado correctamente',
-            user: {
-                id: newUser.id,
-                name: newUser.name,
-                lastname: newUser.lastname,
-                email: newUser.email,
-                rol: newUser.rol,
-                sector: newUser.sector
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al guardar el usuario en la base de datos' });
-    }
+    res.json({
+      message: 'Usuario registrado correctamente',
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        lastname: newUser.lastname,
+        email: newUser.email,
+        rol: newUser.rol,
+        sector: newUser.sector
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al guardar el usuario en la base de datos' });
+  }
 });
 
-
-
-
-
-// Ruta de login (POST /login)
-const jwt = require('jsonwebtoken');
-
+// Login usuarios
 app.post('/login', async (req, res) => {
   console.log('Login - req.body:', req.body);
 
@@ -102,46 +94,73 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    // Generar token JWT con payload básico (por ejemplo id y email)
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET,  // tu secreto en .env
-      { expiresIn: '1d' }  // duración del token (1 día)
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
     );
 
-    // Devolver token al cliente
-    res.json({ 
+    res.json({
       message: `Usuario ${user.email} logueado correctamente`,
       token
     });
-
   } catch (error) {
     console.error('Error en /login:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
+// Login proveedores
+app.post('/login-provider', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const provider = await Provider.findOne({ where: { email } });
+    if (!provider) {
+      return res.status(401).json({ error: 'Proveedor no encontrado' });
+    }
+
+    const validPassword = await bcrypt.compare(password, provider.password);
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+
+    const token = jwt.sign(
+      { providerId: provider.id, email: provider.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.json({
+      message: `Proveedor ${provider.email} autenticado correctamente`,
+      token
+    });
+  } catch (error) {
+    console.error('Error en /login-provider:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// Actualizar usuario (requiere token)
+const { authenticateToken } = require('./middlewares/authMiddleware'); // Importa tu middleware de auth
+
 app.put('/api/users/:id', authenticateToken, async (req, res) => {
   const userId = req.params.id;
   const { name, lastname, email, password, rol, sector } = req.body;
 
   try {
-    // Buscar usuario por id
     const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-    // Opcional: verificar que el usuario que hace la petición sea el mismo o tenga permisos
     if (req.user.id !== user.id) {
       return res.status(403).json({ error: 'No tienes permisos para actualizar este usuario' });
     }
 
-    // Hashear contraseña si se envía
     let hashedPassword = user.password;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    // Actualizar usuario con los datos recibidos (si no vienen, mantiene los actuales)
     await user.update({
       name: name ?? user.name,
       lastname: lastname ?? user.lastname,
@@ -162,12 +181,8 @@ app.put('/api/users/:id', authenticateToken, async (req, res) => {
         sector: user.sector
       }
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar el usuario' });
   }
 });
-// Ruta para obtener el perfil del usuario autenticado
-
-
