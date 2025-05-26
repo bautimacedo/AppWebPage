@@ -1,6 +1,48 @@
 const User = require('../models/userModel');
 const pool = require('../config/database'); // tu conexión a PostgreSQL
 
+const bcrypt = require('bcrypt');
+const { User } = require('../models');
+
+const registerUser = async (req, res) => {
+  console.log('Datos recibidos:', req.body);
+  const { name, lastname, email, password, rol, sector } = req.body;
+
+  if (!name || !lastname || !email || !password || !rol || !sector) {
+    return res.status(400).json({ error: 'Faltan datos obligatorios' });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      name,
+      lastname,
+      email,
+      password: hashedPassword,
+      rol,
+      sector
+    });
+
+    res.json({
+      message: 'Usuario registrado correctamente',
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        lastname: newUser.lastname,
+        email: newUser.email,
+        rol: newUser.rol,
+        sector: newUser.sector
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al guardar el usuario en la base de datos' });
+  }
+};
+
+
+
 // Crear un usuario
 const createUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -74,4 +116,5 @@ module.exports = {
   getUsers,
   getUserByEmail,
   updateUser,
+  registerUser
 };
