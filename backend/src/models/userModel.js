@@ -25,7 +25,7 @@ const User = sequelize.define('User', {
     allowNull: false
   },
   rol: {
-  type: DataTypes.ENUM('admin', 'proveedor', 'normal'), // usar ENUM para mayor control
+  type: DataTypes.ENUM('proveedor', 'normal'), // usar ENUM para mayor control
   allowNull: false
   },
   sector: {
