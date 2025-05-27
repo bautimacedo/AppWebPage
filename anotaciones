@@ -1,14 +1,7 @@
-CREATE TABLE providers (
+CREATE TABLE admins (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL
-);
-
-
-CREATE TABLE products (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  price FLOAT NOT NULL,
-  description VARCHAR(255),
-  providerId INTEGER NOT NULL,
-  CONSTRAINT fk_provider FOREIGN KEY(providerId) REFERENCES providers(id) ON DELETE CASCADE
+  name VARCHAR(100) UNIQUE NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
