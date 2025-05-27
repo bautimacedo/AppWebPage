@@ -90,4 +90,22 @@ router.get('/my-products', authenticateToken, async (req, res) => {
   }
 });
 
+router.get('/:id', authenticateToken, async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const product = await Product.findByPk(productId);
+
+    if (!product) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    res.json(product);
+  } catch (error) {
+    console.error('Error al obtener producto por ID:', error);
+    res.status(500).json({ error: 'Error al obtener el producto' });
+  }
+});
+
+
 module.exports = router;

@@ -68,10 +68,22 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getProviders = async (req, res) => {
+  try {
+    const providers = await User.findAll({ where: { role: 'provider' } });
+    const plainProviders = providers.map(p => p.get({ plain: true }));
+    res.json(plainProviders);
+  } catch (error) {
+    console.error("Error al obtener proveedores:", error);
+    res.status(500).json({ error: "Error al obtener proveedores" });
+  }
+};
+
 
 module.exports = {
   createUser,
   getUsers,
   getUserByEmail,
   updateUser,
+  getProviders,
 };

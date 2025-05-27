@@ -46,6 +46,11 @@
         <label for="productDescription" class="form-label">Description</label>
         <textarea class="form-control" id="productDescription" rows="4" required></textarea>
       </div>
+      <div class="mb-3">
+        <label for="productPrice" class="form-label">Price</label>
+        <input type="number" class="form-control" id="productPrice" required>
+
+      </div>
       <button type="submit" class="btn btn-success">
         <i class="bi bi-save"></i> Save Changes
       </button>
@@ -65,54 +70,65 @@
 
   <!-- Script para cargar y actualizar producto -->
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("id");
 
-    const form = document.getElementById("edit-product-form");
-    const nameInput = document.getElementById("productName");
-    const descriptionInput = document.getElementById("productDescription");
+  const form = document.getElementById("edit-product-form");
+  const nameInput = document.getElementById("productName");
+  const descriptionInput = document.getElementById("productDescription");
+  const priceInput = document.getElementById("productPrice");
 
-    document.addEventListener("DOMContentLoaded", () => {
-      fetch(`/api/products/${productId}`, {
-        headers: {
-          "Authorization": "Bearer " + localStorage.getItem("token")
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch(`http://localhost:3000/api/products/${productId}`, {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        return response.json();
       })
-        .then(res => res.json())
-        .then(product => {
-          nameInput.value = product.name;
-          descriptionInput.value = product.description;
-        })
-        .catch(err => {
-          alert("Error loading product data");
-          console.error(err);
-        });
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      fetch(`/api/products/${productId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-          name: nameInput.value,
-          description: descriptionInput.value
-        })
+      .then(data => {
+        console.log('Producto:', data);
+        // Rellenar los inputs con los datos existentes
+        nameInput.value = data.name;
+        descriptionInput.value = data.description;
+        priceInput.value = data.price;
       })
-        .then(res => {
-          if (!res.ok) throw new Error("Error updating product");
-          alert("Product updated successfully!");
-          window.location.href = "myproducts.html";
-        })
-        .catch(err => {
-          alert("Failed to update product.");
-          console.error(err);
-        });
-    });
-  </script>
+      .catch(error => {
+        console.error('Fetch error:', error.message);
+        alert('No se pudo cargar el producto.');
+      });
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:3000/api/products/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      },
+      body: JSON.stringify({
+        name: nameInput.value,
+        description: descriptionInput.value,
+        price: priceInput.value
+      })
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Error updating product");
+        alert("Product updated successfully!");
+        window.location.href = "myproducts.html";
+      })
+      .catch(err => {
+        alert("Failed to update product.");
+        console.error(err);
+      });
+  });
+</script>
+
 </body>
 </html>
