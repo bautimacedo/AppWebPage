@@ -8,11 +8,11 @@ const sequelize = require('./config/database');
 
 //Definimos Roles
 const User = require('./models/userModel');
-const Provider = require('./models/providerModel');
-
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const profileRoutes = require('./routes/profileRoutes'); 
+const Admin = require('./models/adminModel');
+const adminRoutes = require('./routes/adminRoutes'); // Asegúrate de que esta ruta esté correctamente definida
 
 const PORT = 3000; // http://localhost:3000
 

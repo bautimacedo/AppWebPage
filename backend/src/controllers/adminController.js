@@ -36,5 +36,4 @@ module.exports = {
   },
 
   // Aquí agregás lógica para eliminar productos, proveedores, etc.
-  //rodilla gay
 };
