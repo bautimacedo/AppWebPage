@@ -1,11 +1,11 @@
-logica de editar producto, mostrar datos del producto, no los campos vacios.
-cuando vas a proveedores que se muestren todos los proveedores
-crear pantallas de admin
-crear logica de admin para que pueda eliminar productos/proveedores
-logica de editar perfil
-agregar imagenes al producto y proveedores
+//logica de editar producto, mostrar datos del producto, no los campos vacios.
+//cuando vas a proveedores que se muestren todos los proveedores
+//crear pantallas de admin
+//crear logica de admin para que pueda eliminar productos/proveedores
+//logica de editar perfil
+//agregar imagenes al producto y proveedores
 
 
 
-ACTUALIZAR TABLA PARA SACAR EL SECTOR
+//ACTUALIZAR TABLA PARA SACAR EL SECTOR -> ALTER TABLE users DROP COLUMN sector;
 

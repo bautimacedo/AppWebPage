@@ -70,16 +70,16 @@ setupAssociations();
 // Registro de usuario
 app.post('/register', async (req, res) => {
   console.log('Datos recibidos:', req.body);
-  const { name, lastname, email, password, rol, sector } = req.body;
+  const { name, lastname, email, password, rol } = req.body;
 
-  if (!name || !lastname || !email || !password || !rol || !sector) {
+  if (!name || !lastname || !email || !password || !rol ) {
     return res.status(400).json({ error: 'Faltan datos obligatorios' });
   }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({ name, lastname, email, password: hashedPassword, rol, sector });
+    const newUser = await User.create({ name, lastname, email, password: hashedPassword, rol });
 
     res.json({
       message: 'Usuario registrado correctamente',
@@ -89,7 +89,6 @@ app.post('/register', async (req, res) => {
         lastname: newUser.lastname,
         email: newUser.email,
         rol: newUser.rol,
-        sector: newUser.sector
       }
     });
   } catch (error) {
@@ -165,7 +164,7 @@ app.post('/login-admin', async (req, res) => {
 
 app.put('/api/users/:id', authenticateToken, async (req, res) => {
   const userId = req.params.id;
-  const { name, lastname, email, password, rol, sector } = req.body;
+  const { name, lastname, email, password, rol} = req.body;
 
   try {
     const user = await User.findByPk(userId);
@@ -186,7 +185,6 @@ app.put('/api/users/:id', authenticateToken, async (req, res) => {
       email: email ?? user.email,
       password: hashedPassword,
       rol: rol ?? user.rol,
-      sector: sector ?? user.sector
     });
 
     res.json({
@@ -197,7 +195,6 @@ app.put('/api/users/:id', authenticateToken, async (req, res) => {
         lastname: user.lastname,
         email: user.email,
         rol: user.rol,
-        sector: user.sector
       }
     });
   } catch (error) {

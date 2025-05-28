@@ -7,13 +7,11 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const rol = document.getElementById('rol').value;
-            const sector = document.getElementById('sector').value;
-
             try {
                 const res = await fetch('http://localhost:3000/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, lastname, email, password, rol, sector })
+                body: JSON.stringify({ name, lastname, email, password, rol })
             });
 
             const data = await res.json();

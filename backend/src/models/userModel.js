@@ -28,10 +28,6 @@ const User = sequelize.define('User', {
   type: DataTypes.ENUM('proveedor', 'normal'), // usar ENUM para mayor control
   allowNull: false
   },
-  sector: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
