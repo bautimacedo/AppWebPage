@@ -226,7 +226,7 @@ app.put('/api/products/:id', async (req, res) => {
 });
 
 // Traer todos los proveedores
-
+/*
 router.get('/providers', async (req, res) => {
   try {
     const providers = await User.findAll({
@@ -239,3 +239,4 @@ router.get('/providers', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener proveedores' });
   }
 });
+*/
