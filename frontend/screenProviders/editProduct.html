@@ -26,7 +26,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="myproducts.html">My Products</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
         </ul>
       </div>
     </div>
@@ -70,65 +70,119 @@
 
   <!-- Script para cargar y actualizar producto -->
   <script>
+  document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const productId = params.get("id");
+  if (!productId) {
+    alert("Product ID is missing in the URL.");
+    window.location.href = "myproducts.html";
+    return;
+  }
 
   const form = document.getElementById("edit-product-form");
   const nameInput = document.getElementById("productName");
   const descriptionInput = document.getElementById("productDescription");
   const priceInput = document.getElementById("productPrice");
 
-  document.addEventListener("DOMContentLoaded", () => {
-    fetch(`http://localhost:3000/api/products/${productId}`, {
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Producto:', data);
-        // Rellenar los inputs con los datos existentes
-        nameInput.value = data.name;
-        descriptionInput.value = data.description;
-        priceInput.value = data.price;
-      })
-      .catch(error => {
-        console.error('Fetch error:', error.message);
-        alert('No se pudo cargar el producto.');
-      });
+  console.log("Product ID:", productId);
+
+  fetch(`http://localhost:3000/api/products/${productId}`, {
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("token")
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log("Data recibida:", data);
+
+    // Aquí probamos todas las formas posibles de acceder al objeto producto
+    let product = data;
+
+    if (Array.isArray(data)) {
+      // Si viene un array, tomar el primero
+      product = data[0];
+    }
+    if (product && product.dataValues) {
+      // Si es Sequelize, tomar dataValues
+      product = product.dataValues;
+    }
+
+    console.log("Producto a usar:", product);
+
+    if (!product || !product.name) {
+      alert("No se pudo cargar la información del producto correctamente.");
+      return;
+    }
+
+    nameInput.value = product.name || "";
+    descriptionInput.value = product.description || "";
+    priceInput.value = product.price || "";
+
+  })
+  .catch(error => {
+    console.error("Error al cargar producto:", error);
+    alert("No se pudo cargar el producto.");
   });
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/api/products/${productId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("token")
-      },
-      body: JSON.stringify({
-        name: nameInput.value,
-        description: descriptionInput.value,
-        price: priceInput.value
-      })
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Error updating product");
-        alert("Product updated successfully!");
-        window.location.href = "myproducts.html";
-      })
-      .catch(err => {
-        alert("Failed to update product.");
-        console.error(err);
+    try {
+      const res = await fetch(`http://localhost:3000/api/products/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+          name: nameInput.value,
+          description: descriptionInput.value,
+          price: parseFloat(priceInput.value)
+        })
       });
+
+      if (!res.ok) {
+        const contentType = res.headers.get("content-type");
+        let errorMessage = `Error ${res.status}`;
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await res.json();
+          errorMessage += `: ${errorData.message || JSON.stringify(errorData)}`;
+        } else {
+          const errorText = await res.text();
+          errorMessage += `: ${errorText}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      alert("Product updated successfully!");
+      window.location.href = "myproducts.html";
+
+    } catch (err) {
+      alert("Failed to update product. See console for details.");
+      console.error("Error al actualizar:", err);
+    }
   });
+});
+  </script>
+
+  <!-- Script para manejar el token de autenticación -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to access this page.");
+      window.location.href = "login.html";
+    }
+  });
+
+
 </script>
+
 
 </body>
 </html>

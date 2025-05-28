@@ -9,12 +9,13 @@ const sequelize = require('./config/database');
 //Definimos Roles
 const User = require('./models/userModel');
 const Admin = require('./models/adminModel');
-
+const Product = require('./models/productModel');
 //Definimos Rutas
 const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const profileRoutes = require('./routes/profileRoutes'); 
+
 
 console.log('adminRoutes es router?', typeof adminRoutes === 'function');
 console.log('adminRoutes:', adminRoutes);
@@ -200,5 +201,26 @@ app.put('/api/users/:id', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar el usuario' });
+  }
+});
+
+
+app.put('/api/products/:id', async (req, res) => {
+  const id = req.params.id;
+  const { name, description, price } = req.body;
+
+  try {
+    const product = await Product.findByPk(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    await product.save();
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 });
