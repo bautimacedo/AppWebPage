@@ -5,3 +5,11 @@ CREATE TABLE admins (
   password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL,
+  price FLOAT NOT NULL,
+  description VARCHAR,
+  "userId" INTEGER,
+  CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL
+);

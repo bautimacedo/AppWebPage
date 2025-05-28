@@ -9,3 +9,16 @@
 
 //ACTUALIZAR TABLA PARA SACAR EL SECTOR -> ALTER TABLE users DROP COLUMN sector;
 
+/* 
+    Habria que modificar el modelo de usuario para que tenga mas campos asi cuando se busque o mostremos a los proveedores se pueda ver mas informacion de ellos
+    y no solo el nombre, apellido, email y rol.
+    Tambien se podria agregar un campo de descripcion para que los proveedores puedan describir su negocio o servicios.
+    Tambien se podria agregar un campo de telefono para que los usuarios puedan contactarlos mas facilmente.
+    Tambien se podria agregar un campo de direccion para que los usuarios puedan ver donde se encuentran los proveedores.
+    Tambien se podria agregar un campo de imagen para que los proveedores puedan subir una imagen de su negocio o servicios.
+    Para esto se tendria que modificar el modelo de usuario y agregar los nuevos campos. Como tambien se tendria que modificar la base de datos para que acepte los nuevos campos.
+    Tambien se tendria que modificar el frontend para que muestre los nuevos campos y permita a los proveedores editarlos. Y esto requiere
+    modificar el register.html y el profile.html para que tengan los nuevos campos y se puedan editar.
+    Tambien se tendria que modificar el backend para que acepte los nuevos campos y los guarde en la base de datos.
+    Un lindo quilombo pero se puede hacer :)
+*/

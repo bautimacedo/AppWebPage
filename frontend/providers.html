@@ -45,108 +45,74 @@
       <p class="text-light">Meet our verified service providers</p>
     </div>
 
-    <!-- Tarjetas de Proveedores -->
+    <!-- Tarjetas dinámicas -->
     <div class="container mt-4">
-      <div class="row justify-content-center g-4">
-
-        <!-- Tarjeta de proveedor 1 -->
-        <div class="col-md-4">
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-tools fs-1 text-primary mb-3"></i>
-              <h5 class="card-title fw-semibold">Juan Pérez</h5>
-              <p class="card-text">Plumber - Córdoba</p>
-              <p class="card-text"><i class="bi bi-envelope-fill"></i> juanp@example.com</p>
-              <a href="#" class="btn btn-outline-primary">Contact</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tarjeta de proveedor 2 -->
-        <div class="col-md-4">
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-hammer fs-1 text-warning mb-3"></i>
-              <h5 class="card-title fw-semibold">Lucía Gómez</h5>
-              <p class="card-text">Carpenter - Rosario</p>
-              <p class="card-text"><i class="bi bi-envelope-fill"></i> luciag@example.com</p>
-              <a href="#" class="btn btn-outline-warning">Contact</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tarjeta de proveedor 3 -->
-        <div class="col-md-4">
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-lightning-fill fs-1 text-danger mb-3"></i>
-              <h5 class="card-title fw-semibold">Carlos Díaz</h5>
-              <p class="card-text">Electrician - Mendoza</p>
-              <p class="card-text"><i class="bi bi-envelope-fill"></i> carlosd@example.com</p>
-              <a href="#" class="btn btn-outline-danger">Contact</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Agrega más tarjetas según sea necesario -->
-
+      <div class="row justify-content-center g-4" id="providerCardsContainer">
+        <!-- Tarjetas se generan por JS -->
       </div>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/api/users/providers")
-    .then(res => res.json())
-    .then(providers => {
-      const container = document.querySelector(".row.justify-content-center");
-      container.innerHTML = ""; // Limpia las tarjetas de ejemplo
 
-      providers.forEach(provider => {
-        const card = document.createElement("div");
-        card.className = "col-md-4";
-        card.innerHTML = `
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-person-circle fs-1 text-info mb-3"></i>
-              <h5 class="card-title fw-semibold">${provider.name}</h5>
-              <p class="card-text">${provider.profession || "Profesión no especificada"} - ${provider.city || "Ciudad desconocida"}</p>
-              <p class="card-text"><i class="bi bi-envelope-fill"></i> ${provider.email}</p>
-              <a href="#" class="btn btn-outline-info">Contact</a>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    })
-    .catch(error => {
-      console.error("Error al cargar proveedores:", error);
+  <!-- Script para cargar proveedores -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("/api/users/providers")
+        .then(res => res.json())
+        .then(providers => {
+          const container = document.getElementById("providerCardsContainer");
+          container.innerHTML = ""; // Limpia contenido previo si lo hubiera
+
+          if (providers.length === 0) {
+            container.innerHTML = "<p class='text-white text-center'>No providers found.</p>";
+            return;
+          }
+
+          providers.forEach(provider => {
+            const card = document.createElement("div");
+            card.className = "col-md-4";
+            card.innerHTML = `
+              <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
+                <div class="card-body text-center">
+                  <i class="bi bi-person-circle fs-1 text-info mb-3"></i>
+                  <h5 class="card-title fw-semibold">${provider.name}</h5>
+                  <p class="card-text">${provider.profession || "Profession not specified"} - ${provider.city || "Unknown city"}</p>
+                  <p class="card-text"><i class="bi bi-envelope-fill"></i> ${provider.email}</p>
+                  <a href="#" class="btn btn-outline-info">Contact</a>
+                </div>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        })
+        .catch(error => {
+          console.error("Error loading providers:", error);
+        });
     });
-});
-</script>
+  </script>
 
   <!-- Modal de contacto -->
-<div id="contactModal" class="modal-contact d-none">
-  <div class="modal-content-contact p-4 rounded-4 shadow-lg">
-    <h3 class="mb-3 text-center">Contactar proveedor</h3>
-    <form id="contactForm">
-      <div class="mb-3">
-        <label for="emailInput" class="form-label">Tu Email</label>
-        <input type="email" class="form-control" id="emailInput" placeholder="tuemail@example.com" required />
-      </div>
-      <div class="mb-3">
-        <label for="messageInput" class="form-label">Mensaje</label>
-        <textarea class="form-control" id="messageInput" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
-      </div>
-      <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" id="closeModalBtn">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Enviar</button>
-      </div>
-    </form>
+  <div id="contactModal" class="modal-contact d-none">
+    <div class="modal-content-contact p-4 rounded-4 shadow-lg">
+      <h3 class="mb-3 text-center">Contactar proveedor</h3>
+      <form id="contactForm">
+        <div class="mb-3">
+          <label for="emailInput" class="form-label">Tu Email</label>
+          <input type="email" class="form-control" id="emailInput" placeholder="tuemail@example.com" required />
+        </div>
+        <div class="mb-3">
+          <label for="messageInput" class="form-label">Mensaje</label>
+          <textarea class="form-control" id="messageInput" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" id="closeModalBtn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-
 
 </body>
+</html>

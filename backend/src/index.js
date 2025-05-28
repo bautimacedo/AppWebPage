@@ -224,3 +224,18 @@ app.put('/api/products/:id', async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// Traer todos los proveedores
+
+router.get('/providers', async (req, res) => {
+  try {
+    const providers = await User.findAll({
+      where: { rol: 'proveedor' }, // <-- filtra por el rol proveedor
+      attributes: ['name', 'lastname', 'email', 'password', 'rol'] // Devuelve solo lo necesario
+    });
+    res.json(providers);
+  } catch (error) {
+    console.error("Error al obtener proveedores:", error);
+    res.status(500).json({ error: 'Error al obtener proveedores' });
+  }
+});
