@@ -49,45 +49,6 @@
     <div class="container mt-4">
       <div class="row justify-content-center g-4">
 
-        <!-- Producto 1 -->
-        <div class="col-md-4">
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-gem fs-1 text-success mb-3"></i>
-              <h5 class="card-title fw-semibold">Silver Earrings</h5>
-              <p class="card-text">Handcrafted jewelry from Córdoba</p>
-              <p class="card-text"><i class="bi bi-person-fill"></i> María López</p>
-              <a href="#" class="btn btn-outline-success">See Provider</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 2 -->
-        <div class="col-md-4">
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-cup-hot-fill fs-1 text-warning mb-3"></i>
-              <h5 class="card-title fw-semibold">Organic Coffee Beans</h5>
-              <p class="card-text">Freshly roasted, direct from Rosario</p>
-              <p class="card-text"><i class="bi bi-person-fill"></i> Tomás Herrera</p>
-              <a href="#" class="btn btn-outline-warning">See Provider</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 3 -->
-        <div class="col-md-4">
-          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-            <div class="card-body text-center">
-              <i class="bi bi-bag-fill fs-1 text-info mb-3"></i>
-              <h5 class="card-title fw-semibold">Eco-Friendly Tote Bag</h5>
-              <p class="card-text">Made from recycled materials - Mendoza</p>
-              <p class="card-text"><i class="bi bi-person-fill"></i> Ana Ríos</p>
-              <a href="#" class="btn btn-outline-info">See Provider</a>
-            </div>
-          </div>
-        </div>
-
         <!-- Agrega más productos según sea necesario -->
 
       </div>
@@ -96,6 +57,46 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  async function loadAllProducts() {
+    try {
+      const res = await fetch('http://localhost:3000/api/products'); // asegurate que el backend esté en ese puerto
+      if (!res.ok){
+        throw new Error('No se pudieron cargar los productos');
+        console.error('Error al obtener productos:', error.message);
+        res.status(500).json({ error: error.message });
+      }
+      const products = await res.json();
+      const container = document.querySelector('.row.justify-content-center');
+      container.innerHTML = ''; // Limpiar los productos hardcodeados
+
+      products.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'col-md-4';
+        card.innerHTML = `
+          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
+            <div class="card-body text-center">
+              <i class="bi bi-box-seam fs-1 text-light mb-3"></i>
+              <h5 class="card-title fw-semibold">${prod.name}</h5>
+              <p class="card-text">${prod.description || ''}</p>
+              <p class="card-text"><strong>$${prod.price}</strong></p>
+              <p class="card-text"><i class="bi bi-person-fill"></i> ${prod.provider?.name || 'Sin proveedor'}</p>
+              <a href="#" class="btn btn-outline-light">See Provider</a>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      alert('Error al cargar productos: ' + err.message);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', loadAllProducts);
+</script>
+
+
 
   <!-- Modal de contacto -->
   <div id="contactModal" class="modal-contact d-none">

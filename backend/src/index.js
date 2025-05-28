@@ -8,11 +8,16 @@ const sequelize = require('./config/database');
 
 //Definimos Roles
 const User = require('./models/userModel');
+const Admin = require('./models/adminModel');
+
+//Definimos Rutas
 const adminRoutes = require('./routes/adminRoutes');
-const Admin = require('./models/adminModel'); // Asegúrate de que este modelo exista
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const profileRoutes = require('./routes/profileRoutes'); 
+
+console.log('adminRoutes es router?', typeof adminRoutes === 'function');
+console.log('adminRoutes:', adminRoutes);
 
 const PORT = 3000; // http://localhost:3000
 
@@ -41,8 +46,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/', profileRoutes); 
 
-const adminRoutess = require('./routes/adminRoutes');
-console.log('adminRoutes:', adminRoutess);
 
 // Conexión a la DB
 sequelize.authenticate()

@@ -99,22 +99,39 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  console.log('Cargando productos...');
+
   async function loadMyProducts() {
     try {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No estás autenticado');
 
-      const res = await fetch('/api/products/my-products', {
-        headers: { 'Authorization': 'Bearer ' + token }
+      const res = await fetch('http://localhost:3000/api/products/my-products', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        }
       });
 
       if (!res.ok) {
-        const error = await res.json();
-        alert('Error al cargar productos: ' + (error.error || res.statusText));
+        const contentType = res.headers.get('content-type');
+        let errorMessage = 'Error al cargar productos';
+        
+        if (contentType && contentType.includes('application/json')) {
+          const error = await res.json();
+          errorMessage = error.error || res.statusText;
+        } else {
+          errorMessage = `Error HTTP ${res.status}`;
+        }
+
+        alert(errorMessage);
         return;
       }
 
       const products = await res.json();
+      console.log('Productos cargados:', products);
+
       const container = document.querySelector('.row.justify-content-center');
       container.innerHTML = ''; // limpiar productos actuales
 
@@ -127,21 +144,23 @@
               <h5 class="card-title mb-1">${prod.name}</h5>
               <p class="card-text text-muted mb-0">${prod.description || ''}</p>
             </div>
-            <a href="editarProducto.html?id=${prod.id}" class="btn btn-outline-primary">
+            <a href="/frontend/screenProviders/editProduct.html?id=${prod.id}" class="btn btn-outline-primary">
               <i class="bi bi-pencil-square"></i> Edit
             </a>
           </div>
         `;
         container.appendChild(card);
       });
+
     } catch (err) {
       alert('Error: ' + err.message);
+      console.error(err);
     }
   }
 
-  // Cargar productos al abrir la página
   window.addEventListener('DOMContentLoaded', loadMyProducts);
 </script>
+
 
 
 
