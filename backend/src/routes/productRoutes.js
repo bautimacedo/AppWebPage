@@ -3,7 +3,6 @@ const router = express.Router();
 const Product = require('../models/productModel');
 const User = require('../models/userModel');
 const { authenticateToken } = require('../middlewares/authMiddleware');
-const User = require('../models/userModel');
 
 router.post('/', authenticateToken, async (req, res) => {
   // Asegurate que el userId que tomás corresponde al campo real del token
