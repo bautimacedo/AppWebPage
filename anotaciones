@@ -13,3 +13,10 @@ CREATE TABLE products (
   "userId" INTEGER,
   CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES users(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
+
+ALTER TABLE users ADD COLUMN description TEXT;
+ALTER TABLE users ADD COLUMN location VARCHAR(255);
+ALTER TABLE users ADD COLUMN imageUrl VARCHAR(255);
+
+npm install multer
+

@@ -15,6 +15,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const profileRoutes = require('./routes/profileRoutes'); 
+const path = require('path');
 
 
 console.log('adminRoutes es router?', typeof adminRoutes === 'function');
@@ -30,9 +31,10 @@ const authAdminMiddleware = require('./middlewares/authAdminMiddleware');
 console.log('authAdminMiddleware:', authAdminMiddleware);
 
 // Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100mb' })); // Aumenta el límite de tamaño del cuerpo a 10mb
+app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Aumenta el límite de tamaño del cuerpo a 10mb
 app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir archivos estáticos desde la carpeta 'uploads'
 
 console.log('authenticateAdminToken es función?', typeof authenticateAdminToken === 'function');
 console.log('adminRoutes es router?', typeof adminRoutes === 'function');
@@ -46,7 +48,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/', profileRoutes); 
-
+app.use('/api/profile', profileRoutes); // Ruta para el perfil del usuario
 
 // Conexión a la DB
 sequelize.authenticate()
@@ -226,12 +228,12 @@ app.put('/api/products/:id', async (req, res) => {
 });
 
 // Traer todos los proveedores
-/*
-router.get('/providers', async (req, res) => {
+
+app.get('/api/providers', async (req, res) => {
   try {
     const providers = await User.findAll({
-      where: { rol: 'proveedor' }, // <-- filtra por el rol proveedor
-      attributes: ['name', 'lastname', 'email', 'password', 'rol'] // Devuelve solo lo necesario
+      where: { rol: 'proveedor' },
+      attributes: ['name', 'lastname', 'email']
     });
     res.json(providers);
   } catch (error) {
@@ -239,4 +241,3 @@ router.get('/providers', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener proveedores' });
   }
 });
-*/
