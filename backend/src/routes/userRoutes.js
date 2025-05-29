@@ -8,5 +8,8 @@ router.post('/', createUser);
 router.get('/', getUsers);
 router.get('/providers', getProviders);
 router.put('/:id', authenticateToken, updateUser);
+router.delete('/:id', authenticateToken, deleteUser);
+router.put('/:id/warning', authenticateToken, updateWarning);
+
 
 module.exports = router;

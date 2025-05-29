@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 const { authenticateAdminToken } = require('../middlewares/authAdminMiddleware');
+const { getUsers } = require('../controllers/userController');
 
 router.post('/register', adminController.register);
 router.post('/login', adminController.login);
 router.get('/panel', authenticateAdminToken, adminController.panel);
+router.get('/users', getUsers);
+
 
 module.exports = router;
 // Este archivo define las rutas relacionadas con la administración del sistema.

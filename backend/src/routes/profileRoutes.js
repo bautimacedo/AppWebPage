@@ -25,6 +25,23 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
+router.get('/profile', authenticateAdminToken, async (req, res) => {
+  try {
+    const admin = await Admin.findByPk(req.admin.id);
+    if (!admin) return res.status(404).json({ message: 'Admin no encontrado' });
+
+    res.json({
+      id: admin.id,
+      name: admin.name,
+      email: admin.email,
+    });
+  } catch (err) {
+    console.error('Error obteniendo perfil de admin:', err);
+    res.status(500).json({ message: 'Error interno' });
+  }
+});
+
+
 // Actualizar perfil del usuario autenticado
 router.put('/profile', authenticateToken, upload.single('profileImage'), async (req, res) => {
   try {

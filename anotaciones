@@ -20,3 +20,6 @@ ALTER TABLE users ADD COLUMN imageUrl VARCHAR(255);
 
 npm install multer
 
+
+
+ALTER TABLE "users" ADD COLUMN warning TEXT;

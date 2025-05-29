@@ -79,6 +79,41 @@ const getProviders = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const deleted = await User.destroy({ where: { id: userId } });
+    if (deleted) {
+      res.json({ message: 'Usuario eliminado correctamente' });
+    } else {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar el usuario' });
+  }
+};
+
+// Actualizar warning del usuario
+const updateWarning = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { warning } = req.body;
+
+    const [updated] = await User.update({ warning }, { where: { id: userId } });
+
+    if (updated) {
+      const updatedUser = await User.findByPk(userId);
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar el warning' });
+  }
+};
+
 
 module.exports = {
   createUser,
@@ -86,4 +121,6 @@ module.exports = {
   getUserByEmail,
   updateUser,
   getProviders,
+  deleteUser,
+  updateWarning
 };

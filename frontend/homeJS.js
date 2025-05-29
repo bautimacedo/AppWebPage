@@ -40,6 +40,21 @@ console.log('TOKEN DESDE HOME:', localStorage.getItem('token'));
       nav.appendChild(li);
     }
 
+    if (user.tipo === 'admin') {
+    const nav = document.querySelector('.navbar-nav');
+
+    const li = document.createElement('li');
+    li.className = 'nav-item';
+
+    const a = document.createElement('a');
+    a.className = 'nav-link';
+    a.href = '/frontend/screenAdmin/panelAdmin.html';
+    a.textContent = 'Admin Panel';
+
+    li.appendChild(a);
+    nav.appendChild(li);
+  }
+
   } catch (err) {
     console.error('Error al obtener los datos del usuario:', err);
   }
