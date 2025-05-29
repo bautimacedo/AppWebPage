@@ -2,8 +2,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const { authenticateToken } = require('../middlewares/authMiddleware');
+const { authenticateAdminToken } = require('../middlewares/authAdminMiddleware');
+
 const upload = require('../middlewares/uploadMiddleware');
 const User = require('../models/userModel');
+const Admin = require('../models/adminModel');
+
 
 // Obtener perfil del usuario autenticado
 router.get('/profile', authenticateToken, async (req, res) => {
@@ -25,7 +29,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
-router.get('/profile', authenticateAdminToken, async (req, res) => {
+router.get('/admin/profile', authenticateAdminToken, async (req, res) => {
   try {
     const admin = await Admin.findByPk(req.admin.id);
     if (!admin) return res.status(404).json({ message: 'Admin no encontrado' });
