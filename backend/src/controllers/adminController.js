@@ -24,7 +24,8 @@ module.exports = {
       if (!valid) return res.status(401).json({ error: 'Credenciales inválidas' });
 
       // Crear token JWT para admin
-      const token = jwt.sign({ adminId: admin.id }, 'secret_admin_key', { expiresIn: '1h' });
+      const token = jwt.sign({ adminId: admin.id }, process.env.JWT_ADMIN_SECRET || 'rodilla', { expiresIn: '1h' });
+
       res.json({ token });
     } catch (error) {
       res.status(500).json({ error: 'Error en login admin' });
