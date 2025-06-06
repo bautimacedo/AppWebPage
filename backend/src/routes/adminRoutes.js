@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 const { authenticateAdminToken } = require('../middlewares/authAdminMiddleware');
-const { getUsers, updateWarning, deleteUser } = require('../controllers/userController');
+const { getUsers, createWarning, deleteUser } = require('../controllers/userController');
 const { getAllProducts, deleteProduct } = require('../controllers/productController');
+const warningController = require('../controllers/warningController');
 
 router.post('/register', adminController.register);
 router.post('/login', adminController.login);
 router.get('/panel', authenticateAdminToken, adminController.panel);
 router.get('/users', getUsers);
-router.put('/users/:id/warning', authenticateAdminToken, updateWarning);
-
+router.post('/users/:id/warnings', authenticateAdminToken, warningController.createWarning);
+router.get('/users/:id/warnings', authenticateAdminToken, warningController.getWarningsByUser);
 router.get('/productos', authenticateAdminToken, getAllProducts);      
 router.delete('/productos/:id', authenticateAdminToken, deleteProduct); 
 router.delete('/users/:id', authenticateAdminToken, deleteUser);

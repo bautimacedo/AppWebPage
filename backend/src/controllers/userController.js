@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const pool = require('../config/database'); // tu conexión a PostgreSQL
+const Warning = require('../models/warningModel');
 
 // Crear un usuario
 const createUser = async (req, res) => {
@@ -95,22 +96,26 @@ const deleteUser = async (req, res) => {
 };
 
 // Actualizar warning del usuario
-const updateWarning = async (req, res) => {
+const createWarning = async (req, res) => {
   try {
     const userId = req.params.id;
-    const { warning } = req.body;
+    const { message, issuedBy } = req.body;
 
-    const [updated] = await User.update({ warning }, { where: { id: userId } });
-
-    if (updated) {
-      const updatedUser = await User.findByPk(userId);
-      res.json(updatedUser);
-    } else {
-      res.status(404).json({ error: 'Usuario no encontrado' });
+    // Validación mínima
+    if (!message) {
+      return res.status(400).json({ error: 'El mensaje de advertencia es obligatorio' });
     }
+
+    const warning = await Warning.create({
+      userId,
+      message,
+      issuedBy
+    });
+
+    res.status(201).json({ message: 'Advertencia creada correctamente', warning });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al actualizar el warning' });
+    console.error('Error al crear advertencia:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -122,5 +127,5 @@ module.exports = {
   updateUser,
   getProviders,
   deleteUser,
-  updateWarning
+  createWarning
 };

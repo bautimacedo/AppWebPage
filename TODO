@@ -5,7 +5,7 @@
 //logica de editar perfil
 //agregar imagenes al producto y proveedores
 //Ver detalle del producto, que te abra la página en grande y que haya un boton para ir al perfil del proceedor con sus productos publicados
-
+//AGREGAR HISTORIAL DE ACCIONES 
 
 //ACTUALIZAR TABLA PARA SACAR EL SECTOR -> ALTER TABLE users DROP COLUMN sector;
 

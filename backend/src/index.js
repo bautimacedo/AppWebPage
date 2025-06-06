@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const app = express();
 const sequelize = require('./config/database');
+const Warning = require('./models/warningModel'); // Importa el modelo de Warning
 
 //Definimos Roles
 const User = require('./models/userModel');

@@ -46,10 +46,6 @@ const User = sequelize.define('User', {
     defaultValue: DataTypes.NOW,
     allowNull: false,
   },
-  warning: {
-  type: DataTypes.TEXT,
-  allowNull: true,
-  },
 
 }, {
   timestamps: false,
