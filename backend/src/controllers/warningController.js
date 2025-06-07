@@ -29,7 +29,35 @@ const getWarningsByUser = async (req, res) => {
   }
 };
 
+const getAllWarnings = async (req, res) => {
+  try {
+    const warnings = await Warning.findAll({ include: User });
+    res.json(warnings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener los warnings' });
+  }
+};
+
+const deleteWarning = async (req, res) => {
+  try {
+    const warningId = req.params.id;
+    const deleted = await Warning.destroy({ where: { id: warningId } });
+    if (deleted) {
+      res.json({ message: 'Warning eliminado correctamente' });
+    } else {
+      res.status(404).json({ error: 'Warning no encontrado' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al eliminar el warning' });
+  }
+};
+
+
 module.exports = {
   createWarning,
-  getWarningsByUser
+  getWarningsByUser,
+  deleteWarning,
+  getAllWarnings
 };

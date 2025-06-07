@@ -87,6 +87,8 @@
           <h5>${prod.name}</h5>
           <p><strong>Precio:</strong> $${prod.price}</p>
           <p><strong>Descripción:</strong> ${prod.description}</p>
+          <p><strong>Usuario:</strong> ${prod.User?.firstName || ''} ${prod.User?.lastName || ''}</p>
+          <p><strong>Email:</strong> ${prod.User?.email || 'N/A'}</p>
           <button class="btn btn-danger" onclick="eliminarProducto(${prod.id})">Eliminar</button>
         `;
 

@@ -26,7 +26,9 @@ exports.createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.findAll();
+    const products = await Product.findAll({
+  include: { model: User, attributes: ['firstName', 'lastName', 'email'] }
+  });
     res.json(products);
   } catch (error) {
     console.error('Error al obtener productos:', error);

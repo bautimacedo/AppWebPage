@@ -5,7 +5,10 @@ const { authenticateAdminToken } = require('../middlewares/authAdminMiddleware')
 const { getUsers, createWarning, deleteUser } = require('../controllers/userController');
 const { getAllProducts, deleteProduct } = require('../controllers/productController');
 const warningController = require('../controllers/warningController');
+const { getAllWarnings, deleteWarning } = require('../controllers/warningController');
 
+router.get('/warnings', authenticateAdminToken, getAllWarnings);
+router.delete('/warnings/:id', authenticateAdminToken, deleteWarning);
 router.post('/register', adminController.register);
 router.post('/login', adminController.login);
 router.get('/panel', authenticateAdminToken, adminController.panel);
