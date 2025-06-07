@@ -9,7 +9,7 @@ const createWarning = async (req, res) => {
     const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-    const warning = await Warning.create({ userId, message, issuedBy });
+    const warning = await Warning.create({ userId, message, issuedBy }); // 👈 corregido
     res.status(201).json(warning);
   } catch (error) {
     console.error(error);
@@ -21,7 +21,7 @@ const getWarningsByUser = async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const warnings = await Warning.findAll({ where: { userId } });
+    const warnings = await Warning.findAll({ where: { userId } }); // 👈 corregido
     res.json(warnings);
   } catch (error) {
     console.error(error);

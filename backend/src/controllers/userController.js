@@ -95,30 +95,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// Actualizar warning del usuario
-const createWarning = async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const { message, issuedBy } = req.body;
-
-    // Validación mínima
-    if (!message) {
-      return res.status(400).json({ error: 'El mensaje de advertencia es obligatorio' });
-    }
-
-    const warning = await Warning.create({
-      userId,
-      message,
-      issuedBy
-    });
-
-    res.status(201).json({ message: 'Advertencia creada correctamente', warning });
-  } catch (error) {
-    console.error('Error al crear advertencia:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
 
 module.exports = {
   createUser,
@@ -127,5 +103,4 @@ module.exports = {
   updateUser,
   getProviders,
   deleteUser,
-  createWarning
 };

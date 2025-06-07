@@ -110,28 +110,39 @@
   <!-- JS -->
   <script>
     async function fetchUsers() {
-      const res = await fetch('http://localhost:3000/api/admin/users');
-      const users = await res.json();
-      const tbody = document.getElementById('userTableBody');
-      tbody.innerHTML = '';
-      users.forEach(user => {
-        tbody.innerHTML += `
-          <tr>
-            <td>${user.email}</td>
-            <td>${user.role}</td>
-            <td>${user.warning || ''}</td>
-            <td>
-              <button class="btn btn-outline-danger btn-sm" onclick="deleteUser(${user.id})">
-                <i class="bi bi-trash"></i>
-              </button>
-              <button class="btn btn-outline-warning btn-sm" onclick="openWarningModal(${user.id})">
-                <i class="bi bi-exclamation-triangle"></i>
-              </button>
-            </td>
-          </tr>
-        `;
-      });
-    }
+  const res = await fetch('http://localhost:3000/api/admin/users');
+  const users = await res.json();
+
+  const tbody = document.getElementById('userTableBody');
+  tbody.innerHTML = '';
+
+  for (const user of users) {
+    const warningRes = await fetch(`http://localhost:3000/api/admin/users/${user.id}/warnings`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const warnings = await warningRes.json();
+    const lastWarning = warnings.length > 0 ? warnings[warnings.length - 1].message : '';
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${user.email}</td>
+        <td>${user.role}</td>
+        <td>${lastWarning}</td>
+        <td>
+          <button class="btn btn-outline-danger btn-sm" onclick="deleteUser(${user.id})">
+            <i class="bi bi-trash"></i>
+          </button>
+          <button class="btn btn-outline-warning btn-sm" onclick="openWarningModal(${user.id})">
+            <i class="bi bi-exclamation-triangle"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }
+}
+
     const token = localStorage.getItem('adminToken'); // Asegúrate de tener el token
     console.log('Token:', token);
     async function deleteUser(id) {
@@ -161,19 +172,21 @@
     }
 
     async function sendWarning() {
-      const id = document.getElementById('warningUserId').value;
-      const text = document.getElementById('warningText').value;
-      await fetch(`http://localhost:3000/api/admin/users/${id}/warning`, {
-        method: 'PUT',
-         headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ warning: text })
-      });
-      bootstrap.Modal.getInstance(document.getElementById('warningModal')).hide();
-      fetchUsers();
-    }
+  const id = document.getElementById('warningUserId').value;
+  const text = document.getElementById('warningText').value;
+  await fetch(`http://localhost:3000/api/admin/users/${id}/warnings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ message: text, issuedBy: 'admin' })
+  });
+  alert('Warning enviado correctamente');
+  bootstrap.Modal.getInstance(document.getElementById('warningModal')).hide();
+  fetchUsers();
+}
+
 
     fetchUsers();
   </script>

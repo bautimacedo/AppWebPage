@@ -9,12 +9,13 @@ const Warning = sequelize.define('Warning', {
     primaryKey: true
   },
   userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'users',
-      key: 'id'
-    }
+  type: DataTypes.INTEGER,
+  allowNull: false,
+  field: 'userid',
+  references: {
+    model: 'users',
+    key: 'id'
+  }
   },
   message: {
     type: DataTypes.TEXT,
@@ -22,10 +23,12 @@ const Warning = sequelize.define('Warning', {
   },
   issuedBy: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
+     field: 'issuedby' // 👈 importante para que coincida con la BD
   },
   createdAt: {
     type: DataTypes.DATE,
+    field: 'createdat', // 👈 clave
     defaultValue: DataTypes.NOW
   }
 }, {
