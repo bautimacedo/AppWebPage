@@ -2,203 +2,215 @@
 html, body {
     height: 100%;
     margin: 0;
-    background-image: url('../Imagenes/background-image.png'); /* Asegúrate de que la ruta de la imagen sea correcta */
-    background-size: cover;  /* Esto asegura que la imagen cubra toda la página */
-    background-position: center; /* Centra la imagen en la pantalla */
-    background-attachment: fixed; /* Hace que la imagen se mantenga fija al hacer scroll */
-    overflow: hidden;
+    background-image: url('../Imagenes/background-image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+    color: #f3f0eb;
 }
 
-/* Personalización del formulario */
-h2 {
-    text-align: center;
-    color: #3E2C1C; /* Color oscuro para el texto */
-    font-family: 'Arial', sans-serif;
-    font-size: 2rem;
-    margin-bottom: 20px;
+/* Títulos */
+h1, h2, h4 {
+    color: #f3f0eb;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
 }
 
 /* Inputs */
-input {
-    background-color: #fff; /* Blanco para los campos */
-    border: 1px solid #ccc; /* Borde sutil */
+input, textarea {
+    background-color: #fff;
+    border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     width: 100%;
     font-size: 1rem;
-    margin-bottom: 20px; /* Espaciado entre campos */
+    margin-bottom: 20px;
+    color: #3E2C1C;
 }
 
-input:focus {
-    border-color: #3E2C1C; /* Cambio de borde al hacer foco */
+input:focus, textarea:focus {
+    border-color: #3E2C1C;
     outline: none;
-    box-shadow: 0 0 8px rgba(62, 44, 28, 0.3); /* Sombra suave */
+    box-shadow: 0 0 8px rgba(62, 44, 28, 0.3);
 }
 
 /* Botón de login */
-.btn-login{
-    background-color: #3E2C1C; /* Color marrón para el botón */
+.btn-login, .btn-custom {
+    background-color: #3E2C1C;
     color: white;
     border: none;
     padding: 12px;
     width: 100%;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: background-color 0.8s ease; /* Efecto de transición */
-    margin-top: 5%;
+    transition: background-color 0.3s ease;
+    border-radius: 0.5rem;
 }
 
-button:hover {
-    background-color: #7a634e; /* Tonalidad más clara al pasar el ratón */
+.btn-login:hover, .btn-custom:hover {
+    background-color: #6c4c30;
 }
 
-/* Logo centrado y tamaño ajustado */
-
-.logo-login {
-    margin-top: 10%;
-    width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centra verticalmente */
-    height: 100px; /* Ajusta la altura del contenedor si es necesario */
-}
-
-.forgotpassword-login{
-    margin-top: -6%;
-    margin-left: 50%;
-    color: #3E2C1C;
-}
-
-.register-login{
-    margin-top: -2%;
-    margin-left: 20%;
-    color: #3E2C1C;
-}
-
-/* Tarjetas con transparencia inicial baja */
-.card {
-  border: none;
-  background: rgba(62, 44, 28, 0.4); /* más transparentes al inicio */
-  backdrop-filter: blur(8px);
-  border-radius: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.4s ease, background-color 0.4s ease;
-  box-shadow: 0 4px 15px rgba(62, 44, 28, 0.2);
-  cursor: pointer;
-  color: white;
-}
-
-/* Hover: fondo menos transparente, sombra y levitación */
-.card:hover, 
-.card:focus-within {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 30px rgba(122, 99, 78, 0.8);
-  background: rgba(62, 44, 28, 0.85); /* menos transparente al hover */
-  outline: none;
-}
-
-/* Iconos con sombra suave */
-.card i {
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
-  transition: color 0.3s ease;
-}
-
-/* Cambiar color del icono al hover */
-.card:hover i {
-  color: #f5deb3;
-}
-
-/* Títulos con sombra */
-.card .card-title {
-  font-weight: 700;
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-/* Texto descriptivo más suave */
-.card .card-text {
-  color: #e0d7c1;
-  font-size: 1rem;
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-}
-
-/* Botones personalizados */
-.btn-outline-primary,
-.btn-outline-warning,
-.btn-outline-danger {
-  border-radius: 0.5rem;
-  font-weight: 600;
-  padding: 0.5rem 1.2rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Hover botones con colores cálidos y fondos sólidos */
+/* Botones outline personalizados */
 .btn-outline-primary:hover {
-  background-color: #7a634e;
-  color: white;
-  border-color: #7a634e;
+    background-color: #7a634e;
+    color: white;
+    border-color: #7a634e;
 }
 
 .btn-outline-warning:hover {
-  background-color: #a1835a;
-  color: white;
-  border-color: #a1835a;
+    background-color: #a1835a;
+    color: white;
+    border-color: #a1835a;
 }
 
 .btn-outline-danger:hover {
-  background-color: #a0522d;
-  color: white;
-  border-color: #a0522d;
+    background-color: #a0522d;
+    color: white;
+    border-color: #a0522d;
 }
 
-/* Fondo modal con opacidad 50% */
+/* Logo */
+.logo-login {
+    margin-top: 10%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+/* Enlaces de login */
+.forgotpassword-login, .register-login {
+    color: #f3f0eb;
+    font-size: 0.9rem;
+}
+
+.forgotpassword-login {
+    margin-top: -6%;
+    margin-left: 50%;
+}
+
+.register-login {
+    margin-top: -2%;
+    margin-left: 20%;
+}
+
+/* Tarjetas */
+.card {
+    border: none;
+    background: rgba(62, 44, 28, 0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+    box-shadow: 0 4px 15px rgba(62, 44, 28, 0.2);
+    color: #f3f0eb;
+}
+
+/* Hover tarjeta */
+.card:hover, .card:focus-within {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(122, 99, 78, 0.8);
+    background: rgba(122, 99, 78, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+/* Iconos dentro de tarjetas */
+.card i {
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+    transition: color 0.3s ease;
+}
+
+.card:hover i {
+    color: #f5deb3;
+}
+
+/* Título tarjeta */
+.card .card-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Texto tarjeta */
+.card .card-text {
+    color: #e0d7c1;
+    font-size: 1rem;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Hover para textos (mejor visibilidad) */
+.card p:hover,
+.card h4:hover {
+    color: #ffe8cc;
+    transition: color 0.3s ease;
+}
+
+/* Estilo exclusivo para la card de Políticas de Uso */
+.politicas-card:hover {
+    background-color: white !important;
+    color: #3E2C1C !important;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Cambiar color textos dentro de la card politicas al hacer hover */
+.politicas-card:hover h1,
+.politicas-card:hover h4,
+.politicas-card:hover p,
+.politicas-card:hover a {
+    color: #3E2C1C !important;
+    text-shadow: none !important;
+}
+
+/* Modal fondo */
 .modal-contact {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* fondo semitransparente */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050; /* encima de todo */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
 }
 
-/* Contenido modal */
+/* Modal contenido */
 .modal-content-contact {
-  background-color: #3e2c1c;
-  background: rgba(62, 44, 28, 0.95);
-  color: white;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: 0 0 20px rgba(122, 99, 78, 0.8);
-  border-radius: 1rem;
+    background: rgba(62, 44, 28, 0.95);
+    color: white;
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 0 20px rgba(122, 99, 78, 0.8);
+    border-radius: 1rem;
 }
 
-/* Ocultar modal */
-.d-none {
-  display: none !important;
-}
-
-/* Inputs con estilo personalizado */
+/* Inputs del modal */
 .modal-content-contact input,
 .modal-content-contact textarea {
-  background-color: #5a4531;
-  border: none;
-  color: white;
-  border-radius: 0.5rem;
+    background-color: #5a4531;
+    border: none;
+    color: white;
+    border-radius: 0.5rem;
 }
 
 .modal-content-contact input::placeholder,
 .modal-content-contact textarea::placeholder {
-  color: #cfc5b1;
+    color: #cfc5b1;
 }
 
 .modal-content-contact input:focus,
 .modal-content-contact textarea:focus {
-  background-color: #7a634e;
-  color: white;
-  outline: none;
-  box-shadow: 0 0 8px #c49a5b;
+    background-color: #7a634e;
+    color: white;
+    outline: none;
+    box-shadow: 0 0 8px #c49a5b;
+}
+
+/* Ocultar elementos */
+.d-none {
+    display: none !important;
 }
