@@ -41,14 +41,11 @@ const User = sequelize.define('User', {
     field: 'imageurl', // nombre de la columna en la base de datos
     allowNull: true
   },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false,
-  },
 
 }, {
   timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat',
   tableName: 'users'
 });
 

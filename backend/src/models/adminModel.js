@@ -25,7 +25,9 @@ const Admin = sequelize.define('Admin', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat',
   tableName: 'admins'
 });
 
