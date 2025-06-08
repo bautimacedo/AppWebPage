@@ -21,13 +21,16 @@
     if (response.ok) {
       alert(data.message);
 
-      if (loginType === 'admin') {
-        localStorage.setItem('adminToken', data.token);
-        window.location.href = '/frontend/home.html';
-      } else {
-        localStorage.setItem('token', data.token);
-        window.location.href = '/frontend/home.html';
-      }
+        if (loginType === 'admin') {
+          localStorage.setItem('adminToken', data.token);
+          window.location.href = '/frontend/home.html';
+        } else {
+          localStorage.setItem('token', data.token);
+          if (data.userId) {
+            localStorage.setItem('userId', data.userId);
+          }
+          window.location.href = '/frontend/home.html';
+        }
     } else {
       alert(data.error || 'Error al iniciar sesión');
     }
