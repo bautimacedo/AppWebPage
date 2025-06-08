@@ -6,8 +6,9 @@ const { getUsers, createWarning, deleteUser } = require('../controllers/userCont
 const { getAllProducts, deleteProduct } = require('../controllers/productController');
 const warningController = require('../controllers/warningController');
 const { getAllWarnings, deleteWarning } = require('../controllers/warningController');
+const statsController = require('../controllers/statsController');
 
-router.get('/stats', authenticateAdminToken, adminController.getStats);
+router.get('/stats', authenticateAdminToken, statsController.getFullStats);
 router.get('/warnings', authenticateAdminToken, getAllWarnings);
 router.delete('/warnings/:id', authenticateAdminToken, deleteWarning);
 router.post('/register', adminController.register);
