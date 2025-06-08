@@ -105,9 +105,10 @@ document.getElementById('addProductForm').addEventListener('submit', async funct
     const response = await fetch('http://localhost:3000/api/products', {
       method: 'POST',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: formData // 🚫 Esto no funcionaría aquí porque el backend espera JSON
+      body: JSON.stringify(formData)
     });
 
     if (!response.ok) {
