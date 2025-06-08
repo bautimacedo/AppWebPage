@@ -62,21 +62,30 @@ router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req,
 
 // Obtener todos los productos
 router.get('/', async (req, res) => {
+  const { providerId } = req.query;
+
+  let whereClause = {};
+  if (providerId) {
+    whereClause.userId = providerId;  // o el campo que relacione producto con proveedor
+  }
+
   try {
     const products = await Product.findAll({
+      where: whereClause,
       include: [{
         model: User,
         as: 'provider',
-        attributes: ['name'],
+        attributes: ['name']
       }],
       order: [['id', 'DESC']],
     });
     res.json(products);
   } catch (error) {
-    console.error('🔥 Error al obtener productos:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al obtener productos' });
   }
 });
+
 
 // Obtener productos del proveedor logueado
 router.get('/my-products', authenticateToken, async (req, res) => {
@@ -107,11 +116,18 @@ router.get('/my-products', authenticateToken, async (req, res) => {
 });
 
 // Obtener un producto por ID
+// Obtener un producto por ID (con su proveedor)
 router.get('/:id', authenticateToken, async (req, res) => {
   const productId = req.params.id;
 
   try {
-    const product = await Product.findByPk(productId);
+    const product = await Product.findByPk(productId, {
+      include: [{
+        model: User,
+        as: 'provider',
+        attributes: ['id', 'name', 'lastname', 'email', 'location', 'description', 'imageUrl'],
+      }]
+    });
 
     if (!product) {
       return res.status(404).json({ error: 'Producto no encontrado' });

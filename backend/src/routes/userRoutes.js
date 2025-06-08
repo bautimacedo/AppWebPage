@@ -39,4 +39,24 @@ router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req,
   }
 });
 
+router.get('/seeProviders/:id', async (req, res) => {
+  try {
+    const provider = await User.findByPk(req.params.id, {
+      attributes: ['id', 'name', 'email', 'phone', 'description', 'imageUrl', 'rol'],
+    });
+
+    if (!provider || provider.rol !== 'proveedor') {
+      return res.status(404).json({ error: 'Proveedor no encontrado' });
+    }
+
+    res.json(provider);
+
+  } catch (error) {
+    console.error('Error al obtener proveedor:', error);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+module.exports = router;
+
 module.exports = router;
