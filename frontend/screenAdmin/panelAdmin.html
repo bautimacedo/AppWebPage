@@ -71,7 +71,7 @@
           </div>
         </div>
 
-        <!-- Tarjeta Proveedores -->
+        <!-- Tarjeta Warnings -->
         <div class="card home-card col-md-3 text-center">
           <div class="card-body">
             <i class="bi bi-truck fs-1 mb-3 text-danger"></i>
@@ -80,6 +80,27 @@
             <a href="/frontend/screenAdmin/warningsAdmin.html" class="btn btn-outline-danger">Manage</a>
           </div>
         </div>
+
+        <!-- Tarjeta Backup CSV -->
+        <div class="card home-card col-md-3 text-center">
+          <div class="card-body">
+            <i class="bi bi-download fs-1 mb-3 text-success"></i>
+            <h5 class="card-title">Exportar Backup</h5>
+            <p class="card-text">Descargá todos los datos en un archivo CSV.</p>
+            <button id="downloadBackupBtn" class="btn btn-outline-success">Descargar CSV</button>
+          </div>
+        </div>
+
+        <!-- Tarjeta App Stats -->
+      <div class="card home-card col-md-3 text-center">
+        <div class="card-body">
+          <i class="bi bi-bar-chart-line fs-1 mb-3 text-success"></i>
+          <h5 class="card-title">App Stats</h5>
+          <p class="card-text">Visualiza estadísticas generales.</p>
+          <a href="/frontend/screenAdmin/estadisticasAdmin.html" class="btn btn-outline-success">Ver</a>
+        </div>
+      </div>
+
 
       </div>
     </div>
@@ -93,7 +114,44 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../navbar.js"></script>
+  <script>
+    document.getElementById('downloadBackupBtn').addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('No estás autenticado como administrador');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/api/admin/backup', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          alert('Error al descargar el backup: ' + (error.error || ''));
+          return;
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'backup_localhands.csv';
+        link.click();
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Stats - Admin | Local Hands</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="bg-dark text-white">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">Admin Stats</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="/frontend/screenAdmin/panelAdmin.html">Panel</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Título -->
+  <div class="container mt-5">
+    <h1 class="text-center fw-bold mb-4">Estadísticas Generales de la App</h1>
+
+    <!-- Cards estadísticas -->
+    <div class="row g-4 text-center">
+
+      <div class="col-md-4">
+        <div class="card bg-secondary text-white shadow">
+          <div class="card-body">
+            <h5 class="card-title">Usuarios Totales</h5>
+            <p class="display-6" id="totalUsers">--</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card bg-warning text-dark shadow">
+          <div class="card-body">
+            <h5 class="card-title">Productos Totales</h5>
+            <p class="display-6" id="totalProducts">--</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card bg-danger text-white shadow">
+          <div class="card-body">
+            <h5 class="card-title">Advertencias Emitidas</h5>
+            <p class="display-6" id="totalWarnings">--</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Distribución usuarios por rol -->
+    <div class="mt-5">
+      <h3 class="text-center">Usuarios por Rol</h3>
+      <ul class="list-group" id="rolesList"></ul>
+    </div>
+
+    <!-- Productos por usuario -->
+    <div class="mt-5">
+      <h3 class="text-center">Productos por Usuario</h3>
+      <ul class="list-group" id="productsPerUserList"></ul>
+    </div>
+
+    <!-- Botón de backup -->
+    <div class="text-center mt-5">
+     <a href="http://localhost:3000/api/admin/backup" class="btn btn-outline-light btn-lg">
+        <i class="bi bi-cloud-arrow-down"></i> Descargar Backup CSV
+      </a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return alert('No autenticado');
+
+      try {
+        const res = await fetch('http://localhost:3000/api/admin/stats', {
+
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        });
+
+        const stats = await res.json();
+
+        document.getElementById('totalUsers').textContent = stats.totalUsers;
+        document.getElementById('totalProducts').textContent = stats.totalProducts;
+        document.getElementById('totalWarnings').textContent = stats.totalWarnings;
+
+        const rolesList = document.getElementById('rolesList');
+        stats.usersByRole.forEach(role => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item bg-dark text-white';
+          li.textContent = `${role.rol}: ${role.count}`;
+          rolesList.appendChild(li);
+        });
+
+        const productsList = document.getElementById('productsPerUserList');
+        stats.productsPerUser.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item bg-dark text-white';
+          li.textContent = `Usuario ID ${item.userId}: ${item.count} producto(s)`;
+          productsList.appendChild(li);
+        });
+
+      } catch (err) {
+        console.error('Error cargando stats:', err);
+        alert('Error al obtener estadísticas');
+      }
+    });
+  </script>
+
+</body>
+</html>

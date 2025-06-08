@@ -7,6 +7,7 @@ const { getAllProducts, deleteProduct } = require('../controllers/productControl
 const warningController = require('../controllers/warningController');
 const { getAllWarnings, deleteWarning } = require('../controllers/warningController');
 
+router.get('/stats', authenticateAdminToken, adminController.getStats);
 router.get('/warnings', authenticateAdminToken, getAllWarnings);
 router.delete('/warnings/:id', authenticateAdminToken, deleteWarning);
 router.post('/register', adminController.register);
@@ -18,6 +19,7 @@ router.get('/users/:id/warnings', authenticateAdminToken, warningController.getW
 router.get('/productos', authenticateAdminToken, getAllProducts);      
 router.delete('/productos/:id', authenticateAdminToken, deleteProduct); 
 router.delete('/users/:id', authenticateAdminToken, deleteUser);
+router.get('/backup', authenticateAdminToken, adminController.downloadBackup);
 
 module.exports = router;
 // Este archivo define las rutas relacionadas con la administración del sistema.
