@@ -35,7 +35,7 @@ console.log('authAdminMiddleware:', authAdminMiddleware);
 app.use(express.json({ limit: '100mb' })); // Aumenta el límite de tamaño del cuerpo a 10mb
 app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Aumenta el límite de tamaño del cuerpo a 10mb
 app.use(cors());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir archivos estáticos desde la carpeta 'uploads'
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 console.log('authenticateAdminToken es función?', typeof authenticateAdminToken === 'function');
 console.log('adminRoutes es router?', typeof adminRoutes === 'function');

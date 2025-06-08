@@ -102,14 +102,14 @@ document.getElementById('addProductForm').addEventListener('submit', async funct
     if (!token) throw new Error('No estás autenticado');
 
     // 1. Crear producto primero (sin imagen)
-    const response = await fetch('http://localhost:3000/api/products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify(formData)
-    });
+   const response = await fetch('http://localhost:3000/api/products', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(formData)
+});
 
     if (!response.ok) {
       const error = await response.json();

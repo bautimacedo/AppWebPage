@@ -34,9 +34,12 @@
         if (!providerRes.ok) throw new Error('No se pudo cargar el proveedor');
         const provider = await providerRes.json();
 
+        // Generar URL segura para la imagen
+        const imageUrl = provider.imageUrl || 'https://via.placeholder.com/150';
+
         document.getElementById('providerInfo').innerHTML = `
           <div class="text-center">
-            <img src="${provider.imageUrl || '#'}" alt="Provider Image" class="img-fluid rounded-circle mb-3" style="max-width: 150px;">
+            <img src="${imageUrl}" alt="Provider Image" class="img-fluid rounded-circle mb-3" style="max-width: 150px;">
             <h3>${provider.name}</h3>
             <p><strong>Location:</strong> ${provider.location || 'No info'}</p>
             <p><strong>Description:</strong> ${provider.description || 'No description'}</p>
