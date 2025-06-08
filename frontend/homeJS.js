@@ -30,7 +30,6 @@ console.log('TOKEN DESDE HOME:', localStorage.getItem('token'));
 
       const li = document.createElement('li');
       li.className = 'nav-item';
-
       const a = document.createElement('a');
       a.className = 'nav-link';
       a.href = '/frontend/screenProviders/panelProvider.html'; // Asegúrate de que esta ruta exista

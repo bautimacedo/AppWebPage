@@ -1,5 +1,4 @@
 //logica de editar producto, mostrar datos del producto, no los campos vacios (LISTO)
-//logica de editar perfil
 //agregar imagenes al producto y proveedores
 //Ver detalle del producto, que te abra la página en grande y que haya un boton para ir al perfil del proceedor con sus productos publicados
 //AGREGAR HISTORIAL DE ACCIONES 
@@ -17,5 +16,5 @@
     Tambien se tendria que modificar el frontend para que muestre los nuevos campos y permita a los proveedores editarlos. Y esto requiere
     modificar el register.html y el profile.html para que tengan los nuevos campos y se puedan editar.
     Tambien se tendria que modificar el backend para que acepte los nuevos campos y los guarde en la base de datos.
-    Un lindo quilombo pero se puede hacer :)
+    Un lindo quilombo pero se puede hacer :
 */
