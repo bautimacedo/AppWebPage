@@ -8,7 +8,7 @@ const warningController = require('../controllers/warningController');
 const { getAllWarnings, deleteWarning } = require('../controllers/warningController');
 const statsController = require('../controllers/statsController');
 
-router.get('/stats', authenticateAdminToken, statsController.getFullStats);
+router.get('/stats', authenticateAdminToken, statsController.getGrowthStats);
 router.get('/warnings', authenticateAdminToken, getAllWarnings);
 router.delete('/warnings/:id', authenticateAdminToken, deleteWarning);
 router.post('/register', adminController.register);
