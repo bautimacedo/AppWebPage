@@ -14,6 +14,16 @@
       border-radius: 8px;
       padding: 10px;
     }
+    #rolesChart {
+      max-width: 500px;
+      height: 400px !important;
+      margin: 0 auto;
+    }
+    #warningsTimelineChart,
+    #userGrowthChart,
+    #productGrowthChart {
+      max-height: 250px !important;
+    }
   </style>
 </head>
 <body class="bg-dark text-white">
@@ -63,22 +73,22 @@
 
     <div class="my-5 text-center">
       <h3>Usuarios por Rol</h3>
-      <canvas id="rolesChart" height="300"></canvas>
+      <canvas id="rolesChart"></canvas>
     </div>
 
     <div class="my-5 text-center">
       <h3>Línea de Tiempo de Advertencias</h3>
-      <canvas id="warningsTimelineChart" height="300"></canvas>
+      <canvas id="warningsTimelineChart"></canvas>
     </div>
 
     <div class="row my-5">
       <div class="col-md-6">
         <h4 class="text-center">Crecimiento de Usuarios</h4>
-        <canvas id="userGrowthChart" height="300"></canvas>
+        <canvas id="userGrowthChart"></canvas>
       </div>
       <div class="col-md-6">
         <h4 class="text-center">Crecimiento de Productos</h4>
-        <canvas id="productGrowthChart" height="300"></canvas>
+        <canvas id="productGrowthChart"></canvas>
       </div>
     </div>
 
@@ -167,10 +177,10 @@
       new Chart(document.getElementById('userGrowthChart'), {
         type: 'line',
         data: {
-          labels: userGrowth.map(u => u.dataValues.month),
+          labels: userGrowth.map(u => u.month || u.dataValues?.month),
           datasets: [{
             label: 'Usuarios',
-            data: userGrowth.map(u => u.dataValues.count),
+            data: userGrowth.map(u => u.count || u.dataValues?.count),
             borderColor: 'rgba(54, 162, 235, 1)',
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             fill: true,
@@ -192,10 +202,10 @@
       new Chart(document.getElementById('productGrowthChart'), {
         type: 'line',
         data: {
-          labels: productGrowth.map(p => p.dataValues.month),
+          labels: productGrowth.map(p => p.month || p.dataValues?.month),
           datasets: [{
             label: 'Productos',
-            data: productGrowth.map(p => p.dataValues.count),
+            data: productGrowth.map(p => p.count || p.dataValues?.count),
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             fill: true,

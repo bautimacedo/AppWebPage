@@ -7,10 +7,10 @@ const Admin = sequelize.define('Admin', {
     primaryKey: true,
     autoIncrement: true
   },
-    name: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-    },
+  name: {
+    type: DataTypes.STRING(100),
+    allowNull: false
+  },
   email: {
     type: DataTypes.STRING(150),
     allowNull: false,
@@ -19,10 +19,6 @@ const Admin = sequelize.define('Admin', {
   password: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
   }
 }, {
   timestamps: true,
