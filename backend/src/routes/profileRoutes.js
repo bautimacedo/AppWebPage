@@ -23,6 +23,8 @@ router.get('/profile', authenticateToken, async (req, res) => {
       location: user.location,
       description: user.description,
       imageUrl: user.imageUrl,  // acá se debe llamar imageUrl para ser consistente
+      rol: user.rol,
+      createdAt: user.created_at,
     });
   } catch (error) {
     res.status(500).json({ message: 'Error interno' });

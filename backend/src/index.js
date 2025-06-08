@@ -48,7 +48,7 @@ console.log('typeof adminRoutes:', typeof adminRoutes);
 app.use('/api/admin', adminRoutes); 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-app.use('/', profileRoutes); 
+app.use('/', profileRoutes);
 app.use('/api/profile', profileRoutes); // Ruta para el perfil del usuario
 
 // Conexión a la DB
