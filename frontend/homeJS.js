@@ -1,60 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
-console.log('TOKEN DESDE HOME:', localStorage.getItem('token'));
-
   try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      // No está logueado, redirigir a login
-      window.location.href = '/frontend/login.html';
-      return;
-    }
+    // Acá podés cargar contenido específico del home.
+    // Por ejemplo: emprendimientos destacados, sliders, noticias, etc.
 
-    const response = await fetch('http://localhost:3000/profile', { // o la ruta que devuelva datos del usuario con token
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      // Token inválido o expirado, redirigir a login
-      localStorage.removeItem('token');
-      window.location.href = '/frontend/login.html';
-      return;
-    }
-
-    const user = await response.json();
-
-    if (user.rol === 'proveedor') {
-      const nav = document.querySelector('.navbar-nav');
-
-      const li = document.createElement('li');
-      li.className = 'nav-item';
-      const a = document.createElement('a');
-      a.className = 'nav-link';
-      a.href = '/frontend/screenProviders/panelProvider.html'; // Asegúrate de que esta ruta exista
-      a.textContent = 'Provider Panel';
-
-      li.appendChild(a);
-      nav.appendChild(li);
-    }
-
-    if (user.tipo === 'admin') {
-    const nav = document.querySelector('.navbar-nav');
-
-    const li = document.createElement('li');
-    li.className = 'nav-item';
-
-    const a = document.createElement('a');
-    a.className = 'nav-link';
-    a.href = '/frontend/screenAdmin/panelAdmin.html';
-    a.textContent = 'Admin Panel';
-
-    li.appendChild(a);
-    nav.appendChild(li);
-  }
+    // Ejemplo ficticio de carga de emprendimientos:
+    // const res = await fetch('http://localhost:3000/emprendimientos/destacados');
+    // const data = await res.json();
+    // console.log('Emprendimientos destacados:', data);
 
   } catch (err) {
-    console.error('Error al obtener los datos del usuario:', err);
+    console.error('Error en la carga del home:', err);
   }
 });
