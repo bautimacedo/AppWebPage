@@ -1,15 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
-console.log('TOKEN DESDE HOME:', localStorage.getItem('token'));
+  const userToken = localStorage.getItem('token');
+  const adminToken = localStorage.getItem('adminToken');
 
   try {
-    const token = localStorage.getItem('token');
+    const token = userToken || adminToken;
     if (!token) {
       // No está logueado, redirigir a login
       window.location.href = '/frontend/login.html';
       return;
     }
 
-    const response = await fetch('http://localhost:3000/profile', { // o la ruta que devuelva datos del usuario con token
+    const endpoint = adminToken ? 'http://localhost:3000/admin/profile'
+                                : 'http://localhost:3000/profile';
+
+    const response = await fetch(endpoint, {
       headers: {
         'Authorization': 'Bearer ' + token,
         'Content-Type': 'application/json'
@@ -23,37 +27,29 @@ console.log('TOKEN DESDE HOME:', localStorage.getItem('token'));
       return;
     }
 
-    const user = await response.json();
+    const data = await response.json();
 
-    if (user.rol === 'proveedor') {
-      const nav = document.querySelector('.navbar-nav');
+    const nav = document.querySelector('.navbar-nav');
 
+    if (adminToken) {
       const li = document.createElement('li');
       li.className = 'nav-item';
-
       const a = document.createElement('a');
       a.className = 'nav-link';
-      a.href = '/frontend/screenProviders/panelProvider.html'; // Asegúrate de que esta ruta exista
+      a.href = '/frontend/screenAdmin/panelAdmin.html';
+      a.textContent = 'Admin Panel';
+      li.appendChild(a);
+      nav.appendChild(li);
+    } else if (data.rol === 'proveedor') {
+      const li = document.createElement('li');
+      li.className = 'nav-item';
+      const a = document.createElement('a');
+      a.className = 'nav-link';
+      a.href = '/frontend/screenProviders/panelProvider.html';
       a.textContent = 'Provider Panel';
-
       li.appendChild(a);
       nav.appendChild(li);
     }
-
-    if (user.tipo === 'admin') {
-    const nav = document.querySelector('.navbar-nav');
-
-    const li = document.createElement('li');
-    li.className = 'nav-item';
-
-    const a = document.createElement('a');
-    a.className = 'nav-link';
-    a.href = '/frontend/screenAdmin/panelAdmin.html';
-    a.textContent = 'Admin Panel';
-
-    li.appendChild(a);
-    nav.appendChild(li);
-  }
 
   } catch (err) {
     console.error('Error al obtener los datos del usuario:', err);
