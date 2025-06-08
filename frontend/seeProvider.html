@@ -30,15 +30,17 @@
 
       try {
         // Cargar proveedor
-        const providerRes = await fetch(`http://localhost:3000/api/seeProviders/${providerId}`);
+        const providerRes = await fetch(`http://localhost:3000/api/users/seeProviders/${providerId}`);
         if (!providerRes.ok) throw new Error('No se pudo cargar el proveedor');
         const provider = await providerRes.json();
 
         document.getElementById('providerInfo').innerHTML = `
-          <h3>${provider.name}</h3>
-          <p><strong>Email:</strong> ${provider.email}</p>
-          <p><strong>Phone:</strong> ${provider.phone || 'No info'}</p>
-          <p><strong>Description:</strong> ${provider.description || 'No description'}</p>
+          <div class="text-center">
+            <img src="${provider.imageUrl || '#'}" alt="Provider Image" class="img-fluid rounded-circle mb-3" style="max-width: 150px;">
+            <h3>${provider.name}</h3>
+            <p><strong>Location:</strong> ${provider.location || 'No info'}</p>
+            <p><strong>Description:</strong> ${provider.description || 'No description'}</p>
+          </div>
         `;
 
         // Cargar productos del proveedor
