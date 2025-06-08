@@ -21,6 +21,8 @@ const Product = sequelize.define('Product', {
   }
 }, {
   timestamps: true,
+  createdAt: 'createdat',
+  updatedAt: 'updatedat',
   tableName: 'products'
 });
 
