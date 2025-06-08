@@ -6,11 +6,16 @@ const Product = sequelize.define('Product', {
   name: { type: DataTypes.STRING, allowNull: false },
   price: { type: DataTypes.FLOAT, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: true },
-  userId: { // <- Clave foránea a la tabla users
+  imageUrl: { // <-- Campo nuevo para imagen
+    type: DataTypes.STRING,
+    field: 'imageurl', // 👈 esto lo conecta con la columna real
+    allowNull: true
+  },
+  userId: { // Clave foránea a la tabla users
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'users', // tabla referida
+      model: 'users',
       key: 'id'
     }
   }

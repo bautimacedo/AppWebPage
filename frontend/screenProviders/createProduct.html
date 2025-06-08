@@ -39,26 +39,32 @@
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card p-4 bg-dark bg-opacity-50 text-white shadow-sm">
-          <form id="addProductForm">
-            <div class="mb-3">
-              <label for="productName" class="form-label fw-semibold">Product Name</label>
-              <input type="text" class="form-control" id="productName" placeholder="Enter product name" required />
-            </div>
+          <form id="addProductForm" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="productName" class="form-label fw-semibold">Product Name</label>
+    <input type="text" class="form-control" id="productName" name="name" required />
+  </div>
 
-            <div class="mb-3">
-              <label for="productPrice" class="form-label fw-semibold">Price ($)</label>
-              <input type="number" step="0.01" min="0" class="form-control" id="productPrice" placeholder="Enter product price" required />
-            </div>
+  <div class="mb-3">
+    <label for="productPrice" class="form-label fw-semibold">Price ($)</label>
+    <input type="number" step="0.01" min="0" class="form-control" id="productPrice" name="price" required />
+  </div>
 
-            <div class="mb-3">
-              <label for="productDescription" class="form-label fw-semibold">Description</label>
-              <textarea class="form-control" id="productDescription" rows="3" placeholder="Enter product description"></textarea>
-            </div>
+  <div class="mb-3">
+    <label for="productDescription" class="form-label fw-semibold">Description</label>
+    <textarea class="form-control" id="productDescription" name="description" rows="3"></textarea>
+  </div>
 
-            <button type="submit" class="btn btn-success w-100">
-              <i class="bi bi-plus-square me-2"></i> Add Product
-            </button>
-          </form>
+  <div class="mb-3">
+    <label for="productImage" class="form-label fw-semibold">Image</label>
+    <input type="file" class="form-control" id="productImage" name="photo" accept="image/*" required />
+  </div>
+
+  <button type="submit" class="btn btn-success w-100">
+    <i class="bi bi-plus-square me-2"></i> Add Product
+  </button>
+</form>
+
         </div>
       </div>
     </div>
@@ -82,49 +88,62 @@
   <script src="../navbar.js"></script>
 
   <script>
-  document.getElementById('addProductForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+document.getElementById('addProductForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
 
-    const productData = {
-      name: this.productName.value.trim(),
-      price: parseFloat(this.productPrice.value),
-      description: this.productDescription.value.trim(),
-    };
+  const formData = {
+  name: document.getElementById('productName').value.trim(),
+  price: parseFloat(document.getElementById('productPrice').value),
+  description: document.getElementById('productDescription').value.trim()
+};
 
-    try {
-      const token = localStorage.getItem('token'); // o donde guardes el JWT
-      if (!token) throw new Error('No estás autenticado');
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No estás autenticado');
 
-      const response = await fetch('http://localhost:3000/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify(productData)
-      });
+    // 1. Crear producto primero (sin imagen)
+    const response = await fetch('http://localhost:3000/api/products', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+      body: formData // 🚫 Esto no funcionaría aquí porque el backend espera JSON
+    });
 
-      const text = await response.text();
-      let data;
-      try {
-        data = text ? JSON.parse(text) : {};
-      } catch (err) {
-        console.error('No se pudo parsear JSON:', err);
-        data = {};
-      }
-
-      if (!response.ok) {
-        alert('Error: ' + (data.error || 'No se pudo crear el producto'));
-        return;
-      }
-
-      alert('Producto creado: ' + (data.name || ''));
-      this.reset();
-
-    } catch (err) {
-      alert('Error: ' + err.message);
+    if (!response.ok) {
+      const error = await response.json();
+      alert('Error al crear producto: ' + (error.error || ''));
+      return;
     }
-  });
-  </script>
+
+    const product = await response.json();
+
+    // 2. Subir imagen del producto por separado
+    const imageForm = new FormData();
+    imageForm.append('photo', document.getElementById('productImage').files[0]);
+
+    const imageRes = await fetch(`http://localhost:3000/api/products/${product.id}/photo`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+      body: imageForm
+    });
+
+    if (!imageRes.ok) {
+      const err = await imageRes.json();
+      alert('Producto creado pero hubo un error al subir la imagen: ' + (err.error || ''));
+      return;
+    }
+
+    alert('Producto creado con imagen correctamente');
+    this.reset();
+
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
+});
+</script>
+
 </body>
 </html>
