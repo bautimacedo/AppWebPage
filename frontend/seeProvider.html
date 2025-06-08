@@ -35,7 +35,12 @@
         const provider = await providerRes.json();
 
         // Generar URL segura para la imagen
-        const imageUrl = provider.imageUrl || 'https://via.placeholder.com/150';
+        let imageUrl = 'https://via.placeholder.com/150';
+        if (provider.imageUrl) {
+          imageUrl = provider.imageUrl.startsWith('http')
+            ? provider.imageUrl
+            : `http://localhost:3000/uploads/${provider.imageUrl}`;
+        }
 
         document.getElementById('providerInfo').innerHTML = `
           <div class="text-center">
