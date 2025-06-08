@@ -42,7 +42,7 @@ router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req,
 router.get('/seeProviders/:id', async (req, res) => {
   try {
     const provider = await User.findByPk(req.params.id, {
-      attributes: ['id', 'name', 'email', 'phone', 'description', 'imageUrl', 'rol'],
+      attributes: ['id', 'name', 'email', 'location', 'description', 'imageUrl', 'rol'],
     });
 
     if (!provider || provider.rol !== 'proveedor') {
@@ -56,7 +56,5 @@ router.get('/seeProviders/:id', async (req, res) => {
     res.status(500).json({ error: 'Error interno' });
   }
 });
-
-module.exports = router;
 
 module.exports = router;

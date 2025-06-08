@@ -75,7 +75,7 @@ router.get('/', async (req, res) => {
       include: [{
         model: User,
         as: 'provider',
-        attributes: ['name']
+        attributes: ['id', 'name']
       }],
       order: [['id', 'DESC']],
     });
