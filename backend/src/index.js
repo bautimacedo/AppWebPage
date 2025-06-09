@@ -15,7 +15,7 @@ const Product = require('./models/productModel');
 const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
-const profileRoutes = require('./routes/profileRoutes'); 
+const profileRoutes = require('./routes/profileRoutes');
 const path = require('path');
 
 
@@ -45,7 +45,7 @@ console.log('typeof adminRoutes:', typeof adminRoutes);
 
 
 // Rutas
-app.use('/api/admin', adminRoutes); 
+app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/', profileRoutes);
@@ -76,7 +76,7 @@ app.post('/register', async (req, res) => {
   console.log('Datos recibidos:', req.body);
   const { name, lastname, email, password, rol } = req.body;
 
-  if (!name || !lastname || !email || !password || !rol ) {
+  if (!name || !lastname || !email || !password || !rol) {
     return res.status(400).json({ error: 'Faltan datos obligatorios' });
   }
 
@@ -169,7 +169,7 @@ app.post('/login-admin', async (req, res) => {
 
 app.put('/api/users/:id', authenticateToken, async (req, res) => {
   const userId = req.params.id;
-  const { name, lastname, email, password, rol} = req.body;
+  const { name, lastname, email, password, rol } = req.body;
 
   try {
     const user = await User.findByPk(userId);

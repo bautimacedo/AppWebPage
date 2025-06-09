@@ -1,238 +1,279 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>App Stats - Admin | Local Hands</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css" />
-  <style>
-    canvas {
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      padding: 10px;
-    }
-    #rolesChart {
-      max-width: 500px;
-      height: 400px !important;
-      margin: 0 auto;
-    }
-    #warningsTimelineChart,
-    #userGrowthChart,
-    #productGrowthChart {
-      max-height: 250px !important;
-    }
-  </style>
-</head>
-<body class="bg-dark text-white">
-
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#">Admin Stats</a>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/frontend/profile.html">Profile</a></li>
-          <li class="nav-item"><a class="nav-link" href="/frontend/screenAdmin/panelAdmin.html">Panel</a></li>
-        </ul>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>App Stats - Admin | Local Hands</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      canvas {
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        padding: 10px;
+      }
+      #rolesChart {
+        max-width: 500px;
+        height: 400px !important;
+        margin: 0 auto;
+      }
+      #warningsTimelineChart,
+      #userGrowthChart,
+      #productGrowthChart {
+        max-height: 250px !important;
+      }
+    </style>
+  </head>
+  <body class="bg-dark text-white">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">Admin Stats</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/frontend/home.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/frontend/profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/frontend/screenAdmin/panelAdmin.html"
+                >Panel</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <div class="container mt-5">
-    <h1 class="text-center fw-bold mb-4">Estadísticas Generales de la App</h1>
+    <div class="container mt-5">
+      <h1 class="text-center fw-bold mb-4">Estadísticas Generales de la App</h1>
 
-    <div class="row g-4 text-center">
-      <div class="col-md-4">
-        <div class="card bg-secondary text-white shadow">
-          <div class="card-body">
-            <h5 class="card-title">Usuarios Totales</h5>
-            <p class="display-6" id="totalUsers">--</p>
+      <div class="row g-4 text-center">
+        <div class="col-md-4">
+          <div class="card bg-secondary text-white shadow">
+            <div class="card-body">
+              <h5 class="card-title">Usuarios Totales</h5>
+              <p class="display-6" id="totalUsers">--</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-warning text-dark shadow">
+            <div class="card-body">
+              <h5 class="card-title">Productos Totales</h5>
+              <p class="display-6" id="totalProducts">--</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-danger text-white shadow">
+            <div class="card-body">
+              <h5 class="card-title">Advertencias Emitidas</h5>
+              <p class="display-6" id="totalWarnings">--</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card bg-warning text-dark shadow">
-          <div class="card-body">
-            <h5 class="card-title">Productos Totales</h5>
-            <p class="display-6" id="totalProducts">--</p>
-          </div>
+
+      <div class="my-5 text-center">
+        <h3>Usuarios por Rol</h3>
+        <canvas id="rolesChart"></canvas>
+      </div>
+
+      <div class="my-5 text-center">
+        <h3>Línea de Tiempo de Advertencias</h3>
+        <canvas id="warningsTimelineChart"></canvas>
+      </div>
+
+      <div class="row my-5">
+        <div class="col-md-6">
+          <h4 class="text-center">Crecimiento de Usuarios</h4>
+          <canvas id="userGrowthChart"></canvas>
+        </div>
+        <div class="col-md-6">
+          <h4 class="text-center">Crecimiento de Productos</h4>
+          <canvas id="productGrowthChart"></canvas>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card bg-danger text-white shadow">
-          <div class="card-body">
-            <h5 class="card-title">Advertencias Emitidas</h5>
-            <p class="display-6" id="totalWarnings">--</p>
-          </div>
-        </div>
+
+      <div class="mt-5">
+        <h3 class="text-center">Productos por Usuario</h3>
+        <ul class="list-group" id="productsPerUserList"></ul>
+      </div>
+
+      <div class="text-center mt-5">
+        <a
+          href="http://localhost:3000/api/admin/backup"
+          class="btn btn-outline-light btn-lg"
+        >
+          <i class="bi bi-cloud-arrow-down"></i> Descargar Backup CSV
+        </a>
       </div>
     </div>
 
-    <div class="my-5 text-center">
-      <h3>Usuarios por Rol</h3>
-      <canvas id="rolesChart"></canvas>
-    </div>
+    <script>
+      function groupWarningsByDate(warnings) {
+        const map = {};
+        warnings.forEach((w) => {
+          const date = new Date(w.createdAt).toISOString().slice(0, 10);
+          map[date] = (map[date] || 0) + 1;
+        });
+        const dates = Object.keys(map).sort();
+        return { dates, counts: dates.map((d) => map[d]) };
+      }
 
-    <div class="my-5 text-center">
-      <h3>Línea de Tiempo de Advertencias</h3>
-      <canvas id="warningsTimelineChart"></canvas>
-    </div>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return alert("No autenticado");
 
-    <div class="row my-5">
-      <div class="col-md-6">
-        <h4 class="text-center">Crecimiento de Usuarios</h4>
-        <canvas id="userGrowthChart"></canvas>
-      </div>
-      <div class="col-md-6">
-        <h4 class="text-center">Crecimiento de Productos</h4>
-        <canvas id="productGrowthChart"></canvas>
-      </div>
-    </div>
+        const res = await fetch("http://localhost:3000/api/admin/stats", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const stats = await res.json();
 
-    <div class="mt-5">
-      <h3 class="text-center">Productos por Usuario</h3>
-      <ul class="list-group" id="productsPerUserList"></ul>
-    </div>
+        document.getElementById("totalUsers").textContent = stats.totalUsers;
+        document.getElementById("totalProducts").textContent =
+          stats.totalProducts;
+        document.getElementById("totalWarnings").textContent =
+          stats.totalWarnings;
 
-    <div class="text-center mt-5">
-      <a href="http://localhost:3000/api/admin/backup" class="btn btn-outline-light btn-lg">
-        <i class="bi bi-cloud-arrow-down"></i> Descargar Backup CSV
-      </a>
-    </div>
-  </div>
-
-  <script>
-    function groupWarningsByDate(warnings) {
-      const map = {};
-      warnings.forEach(w => {
-        const date = new Date(w.createdAt).toISOString().slice(0, 10);
-        map[date] = (map[date] || 0) + 1;
-      });
-      const dates = Object.keys(map).sort();
-      return { dates, counts: dates.map(d => map[d]) };
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return alert('No autenticado');
-
-      const res = await fetch('http://localhost:3000/api/admin/stats', {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      const stats = await res.json();
-
-      document.getElementById('totalUsers').textContent = stats.totalUsers;
-      document.getElementById('totalProducts').textContent = stats.totalProducts;
-      document.getElementById('totalWarnings').textContent = stats.totalWarnings;
-
-      new Chart(document.getElementById('rolesChart'), {
-        type: 'pie',
-        data: {
-          labels: stats.usersByRole.map(r => r.rol),
-          datasets: [{
-            data: stats.usersByRole.map(r => r.count),
-            backgroundColor: ['#ffc107', '#17a2b8', '#dc3545', '#28a745']
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { position: 'bottom', labels: { color: '#fff' } },
-            title: { display: true, text: 'Distribución por Rol', color: '#fff' }
-          }
-        }
-      });
-
-      const { dates, counts } = groupWarningsByDate(stats.allWarnings || []);
-      new Chart(document.getElementById('warningsTimelineChart'), {
-        type: 'line',
-        data: {
-          labels: dates,
-          datasets: [{
-            label: 'Advertencias por día',
-            data: counts,
-            fill: false,
-            borderColor: '#ffc107',
-            tension: 0.2
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { labels: { color: '#fff' } },
-            title: { display: true, text: 'Advertencias por Fecha', color: '#fff' }
+        new Chart(document.getElementById("rolesChart"), {
+          type: "pie",
+          data: {
+            labels: stats.usersByRole.map((r) => r.rol),
+            datasets: [
+              {
+                data: stats.usersByRole.map((r) => r.count),
+                backgroundColor: ["#ffc107", "#17a2b8", "#dc3545", "#28a745"],
+              },
+            ],
           },
-          scales: {
-            x: { ticks: { color: '#fff' } },
-            y: { ticks: { color: '#fff' } }
-          }
-        }
-      });
-
-      const growth = stats.growthData || {};
-      const userGrowth = growth.users || [];
-      const productGrowth = growth.products || [];
-
-      new Chart(document.getElementById('userGrowthChart'), {
-        type: 'line',
-        data: {
-          labels: userGrowth.map(u => u.month || u.dataValues?.month),
-          datasets: [{
-            label: 'Usuarios',
-            data: userGrowth.map(u => u.count || u.dataValues?.count),
-            borderColor: 'rgba(54, 162, 235, 1)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { labels: { color: '#fff' } },
-            title: { display: true, text: 'Crecimiento de Usuarios', color: '#fff' }
+          options: {
+            plugins: {
+              legend: { position: "bottom", labels: { color: "#fff" } },
+              title: {
+                display: true,
+                text: "Distribución por Rol",
+                color: "#fff",
+              },
+            },
           },
-          scales: {
-            x: { ticks: { color: '#fff' } },
-            y: { ticks: { color: '#fff' } }
-          }
-        }
-      });
+        });
 
-      new Chart(document.getElementById('productGrowthChart'), {
-        type: 'line',
-        data: {
-          labels: productGrowth.map(p => p.month || p.dataValues?.month),
-          datasets: [{
-            label: 'Productos',
-            data: productGrowth.map(p => p.count || p.dataValues?.count),
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { labels: { color: '#fff' } },
-            title: { display: true, text: 'Crecimiento de Productos', color: '#fff' }
+        const { dates, counts } = groupWarningsByDate(stats.allWarnings || []);
+        new Chart(document.getElementById("warningsTimelineChart"), {
+          type: "line",
+          data: {
+            labels: dates,
+            datasets: [
+              {
+                label: "Advertencias por día",
+                data: counts,
+                fill: false,
+                borderColor: "#ffc107",
+                tension: 0.2,
+              },
+            ],
           },
-          scales: {
-            x: { ticks: { color: '#fff' } },
-            y: { ticks: { color: '#fff' } }
-          }
-        }
-      });
+          options: {
+            plugins: {
+              legend: { labels: { color: "#fff" } },
+              title: {
+                display: true,
+                text: "Advertencias por Fecha",
+                color: "#fff",
+              },
+            },
+            scales: {
+              x: { ticks: { color: "#fff" } },
+              y: { ticks: { color: "#fff" } },
+            },
+          },
+        });
 
-      const productsList = document.getElementById('productsPerUserList');
-      stats.productsPerUser.forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item bg-dark text-white';
-        li.textContent = `Usuario ID ${item.userId}: ${item.count} producto(s)`;
-        productsList.appendChild(li);
-      });
-    });
-  </script>
+        const growth = stats.growthData || {};
+        const userGrowth = growth.users || [];
+        const productGrowth = growth.products || [];
 
-</body>
+        new Chart(document.getElementById("userGrowthChart"), {
+          type: "line",
+          data: {
+            labels: userGrowth.map((u) => u.month || u.dataValues?.month),
+            datasets: [
+              {
+                label: "Usuarios",
+                data: userGrowth.map((u) => u.count || u.dataValues?.count),
+                borderColor: "rgba(54, 162, 235, 1)",
+                backgroundColor: "rgba(54, 162, 235, 0.2)",
+                fill: true,
+                tension: 0.3,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: { labels: { color: "#fff" } },
+              title: {
+                display: true,
+                text: "Crecimiento de Usuarios",
+                color: "#fff",
+              },
+            },
+            scales: {
+              x: { ticks: { color: "#fff" } },
+              y: { ticks: { color: "#fff" } },
+            },
+          },
+        });
+
+        new Chart(document.getElementById("productGrowthChart"), {
+          type: "line",
+          data: {
+            labels: productGrowth.map((p) => p.month || p.dataValues?.month),
+            datasets: [
+              {
+                label: "Productos",
+                data: productGrowth.map((p) => p.count || p.dataValues?.count),
+                borderColor: "rgba(255, 99, 132, 1)",
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                fill: true,
+                tension: 0.3,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: { labels: { color: "#fff" } },
+              title: {
+                display: true,
+                text: "Crecimiento de Productos",
+                color: "#fff",
+              },
+            },
+            scales: {
+              x: { ticks: { color: "#fff" } },
+              y: { ticks: { color: "#fff" } },
+            },
+          },
+        });
+
+        const productsList = document.getElementById("productsPerUserList");
+        stats.productsPerUser.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = "list-group-item bg-dark text-white";
+          li.textContent = `Usuario ID ${item.userId}: ${item.count} producto(s)`;
+          productsList.appendChild(li);
+        });
+      });
+    </script>
+  </body>
 </html>

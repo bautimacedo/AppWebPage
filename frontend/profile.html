@@ -1,199 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Profile | Local Hands</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profile | Local Hands</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Iconos -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Iconos -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
 
-  <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="styles.css" />
-</head>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<body>
-  <div class="background-overlay">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 backdrop-blur">
-      <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">Local Hands</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
-            <li class="nav-item">
-            <a class="nav-link active" href="/frontend/warnings.html">Warnings</a>
-            </li>
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="/frontend/profile.html">Profile</a></li>
-          </ul>
+  <body>
+    <div class="background-overlay">
+      <nav
+        class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 backdrop-blur"
+      >
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold" href="#">Local Hands</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/frontend/home.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/frontend/warnings.html"
+                  >Warnings</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  aria-current="page"
+                  href="/frontend/profile.html"
+                  >Profile</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    <div class="container mt-5 mb-5 text-white">
-      <h2 class="text-light text-center">My Profile</h2>
-      <p class="text-light text-center">Edit your personal information</p>
+      <div class="container mt-5 mb-5 text-white">
+        <h2 class="text-light text-center">My Profile</h2>
+        <p class="text-light text-center">Edit your personal information</p>
 
-      <div class="row justify-content-center">
-        <div class="col-md-6 bg-dark bg-opacity-50 p-4 rounded-4 shadow">
-          <form id="profileForm">
-            <div class="mb-3">
-              <label for="nameInput" class="form-label">Name</label>
-              <input type="text" class="form-control" id="nameInput" placeholder="Juan" />
-            </div>
-            <div class="mb-3">
-              <label for="lastnameInput" class="form-label">Lastname</label>
-              <input type="text" class="form-control" id="lastnameInput" placeholder="Pérez"  />
-            </div>
-            <div class="mb-3">
-              <label for="emailInput" class="form-label">Mail</label>
-              <input type="email" class="form-control" id="emailInput" placeholder="correo@ejemplo.com" readonly />
-            </div>
-            <div class="mb-3">
-              <label for="passwordInput" class="form-label">Password</label>
-              <input type="password" class="form-control" id="passwordInput" placeholder="********" readonly />
-            </div>
-            <div class="mb-3">
-              <label for="locationInput" class="form-label">Location</label>
-              <input type="text" class="form-control" id="locationInput" placeholder="Córdoba, Argentina" />
-            </div>
-            <div class="mb-3">
-              <label for="bioInput" class="form-label">About me</label>
-              <textarea class="form-control" id="bioInput" rows="3" placeholder="Tell us about you"></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="profileImage" class="form-label">Profile Image</label>
-              <input class="form-control" type="file" id="profileImage" accept="image/*" />
-              <img id="imagePreview" alt="Preview View" style="max-width: 150px; margin-top: 10px; display:none; border-radius: 50%;" />
-            </div>
-            <div class="d-flex justify-content-between">
-              <button type="button" id="cancelBtn" class="btn btn-secondary">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            </div>
-          </form>
+        <div class="row justify-content-center">
+          <div class="col-md-6 bg-dark bg-opacity-50 p-4 rounded-4 shadow">
+            <form id="profileForm">
+              <div class="mb-3">
+                <label for="nameInput" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nameInput"
+                  placeholder="Juan"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="lastnameInput" class="form-label">Lastname</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastnameInput"
+                  placeholder="Pérez"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="emailInput" class="form-label">Mail</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="emailInput"
+                  placeholder="correo@ejemplo.com"
+                  readonly
+                />
+              </div>
+              <div class="mb-3">
+                <label for="passwordInput" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="passwordInput"
+                  placeholder="********"
+                  readonly
+                />
+              </div>
+              <div class="mb-3">
+                <label for="locationInput" class="form-label">Location</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="locationInput"
+                  placeholder="Córdoba, Argentina"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="bioInput" class="form-label">About me</label>
+                <textarea
+                  class="form-control"
+                  id="bioInput"
+                  rows="3"
+                  placeholder="Tell us about you"
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="profileImage" class="form-label"
+                  >Profile Image</label
+                >
+                <input
+                  class="form-control"
+                  type="file"
+                  id="profileImage"
+                  accept="image/*"
+                />
+                <img
+                  id="imagePreview"
+                  alt="Preview View"
+                  style="
+                    max-width: 150px;
+                    margin-top: 10px;
+                    display: none;
+                    border-radius: 50%;
+                  "
+                />
+              </div>
+              <div class="d-flex justify-content-between">
+                <button type="button" id="cancelBtn" class="btn btn-secondary">
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Guardar cambios
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="navbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('No autenticado. Por favor, inicia sesión.');
-        // window.location.href = '/frontend/login.html';
-        return;
-      }
-
-      const nameInput = document.getElementById('nameInput');
-      const lastnameInput = document.getElementById('lastnameInput');
-      const emailInput = document.getElementById('emailInput');
-      const locationInput = document.getElementById('locationInput');
-      const bioInput = document.getElementById('bioInput');
-      const profileImageInput = document.getElementById('profileImage');
-      const imagePreview = document.getElementById('imagePreview');
-      const cancelBtn = document.getElementById('cancelBtn');
-
-      // Cancelar - ir a home
-      cancelBtn.addEventListener('click', () => {
-        window.location.href = '/frontend/home.html';
-      });
-
-      // Mostrar vista previa imagen
-      profileImageInput.addEventListener('change', () => {
-        const file = profileImageInput.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = e => {
-            imagePreview.src = e.target.result;
-            imagePreview.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        } else {
-          imagePreview.src = '';
-          imagePreview.style.display = 'none';
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("No autenticado. Por favor, inicia sesión.");
+          // window.location.href = '/frontend/login.html';
+          return;
         }
-      });
 
-      // Cargar datos de perfil
-      try {
-        const res = await fetch('http://localhost:3000/profile', {
-          headers: { Authorization: `Bearer ${token}` },
+        const nameInput = document.getElementById("nameInput");
+        const lastnameInput = document.getElementById("lastnameInput");
+        const emailInput = document.getElementById("emailInput");
+        const locationInput = document.getElementById("locationInput");
+        const bioInput = document.getElementById("bioInput");
+        const profileImageInput = document.getElementById("profileImage");
+        const imagePreview = document.getElementById("imagePreview");
+        const cancelBtn = document.getElementById("cancelBtn");
+
+        // Cancelar - ir a home
+        cancelBtn.addEventListener("click", () => {
+          window.location.href = "/frontend/home.html";
         });
 
-        if (!res.ok) throw new Error('No se pudo obtener el perfil');
+        // Mostrar vista previa imagen
+        profileImageInput.addEventListener("change", () => {
+          const file = profileImageInput.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              imagePreview.src = e.target.result;
+              imagePreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+          } else {
+            imagePreview.src = "";
+            imagePreview.style.display = "none";
+          }
+        });
 
-        const user = await res.json();
+        // Cargar datos de perfil
+        try {
+          const res = await fetch("http://localhost:3000/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-        nameInput.value = user.name || '';
-        lastnameInput.value = user.lastname || '';
-        emailInput.value = user.email || '';
-        locationInput.value = user.location || '';
-        bioInput.value = user.description || '';
+          if (!res.ok) throw new Error("No se pudo obtener el perfil");
 
-        if (user.profileImageUrl) {
-          imagePreview.src = user.profileImageUrl;
-          imagePreview.style.display = 'block';
+          const user = await res.json();
+
+          nameInput.value = user.name || "";
+          lastnameInput.value = user.lastname || "";
+          emailInput.value = user.email || "";
+          locationInput.value = user.location || "";
+          bioInput.value = user.description || "";
+
+          if (user.profileImageUrl) {
+            imagePreview.src = user.profileImageUrl;
+            imagePreview.style.display = "block";
+          }
+        } catch (error) {
+          console.error("Error cargando perfil:", error);
         }
-      } catch (error) {
-        console.error('Error cargando perfil:', error);
-      }
 
-      // Enviar formulario con JSON + imagen base64 si existe
-document.getElementById('profileForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+        // Enviar formulario con JSON + imagen base64 si existe
+        document
+          .getElementById("profileForm")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-  const formData = new FormData();
-  formData.append('name', nameInput.value);
-  formData.append('lastname', lastnameInput.value);
-  formData.append('email', emailInput.value);
-  formData.append('location', locationInput.value);
-  formData.append('description', bioInput.value);
+            const formData = new FormData();
+            formData.append("name", nameInput.value);
+            formData.append("lastname", lastnameInput.value);
+            formData.append("email", emailInput.value);
+            formData.append("location", locationInput.value);
+            formData.append("description", bioInput.value);
 
-  const file = profileImageInput.files[0];
-  if (file) {
-    formData.append('profileImage', file);
-  }
+            const file = profileImageInput.files[0];
+            if (file) {
+              formData.append("profileImage", file);
+            }
 
-  try {
-    const res = await fetch('http://localhost:3000/profile', {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+            try {
+              const res = await fetch("http://localhost:3000/profile", {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+              });
 
-    if (!res.ok) throw new Error('Error actualizando perfil');
+              if (!res.ok) throw new Error("Error actualizando perfil");
 
-    alert('Perfil actualizado correctamente');
+              alert("Perfil actualizado correctamente");
 
-    // Recargar datos del perfil para actualizar preview sin recargar toda la página
-    const updatedUser = await res.json();
-    if (updatedUser.user.imageUrl) {
-      imagePreview.src = updatedUser.user.imageUrl;
-      imagePreview.style.display = 'block';
-    } else {
-      imagePreview.src = '';
-      imagePreview.style.display = 'none';
-    }
-  } catch (error) {
-    console.error('Error actualizando perfil:', error);
-    alert('No se pudo actualizar el perfil');
-  }
-});
-    });
-  </script>
-</body>
+              // Recargar datos del perfil para actualizar preview sin recargar toda la página
+              const updatedUser = await res.json();
+              if (updatedUser.user.imageUrl) {
+                imagePreview.src = updatedUser.user.imageUrl;
+                imagePreview.style.display = "block";
+              } else {
+                imagePreview.src = "";
+                imagePreview.style.display = "none";
+              }
+            } catch (error) {
+              console.error("Error actualizando perfil:", error);
+              alert("No se pudo actualizar el perfil");
+            }
+          });
+      });
+    </script>
+  </body>
 </html>

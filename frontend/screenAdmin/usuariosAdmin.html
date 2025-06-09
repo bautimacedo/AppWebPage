@@ -1,130 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin - Users</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Users</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Iconos -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Iconos -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
 
-  <!-- Estilos personalizados -->
-  <link rel="stylesheet" href="../styles.css" />
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="../styles.css" />
 
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    .background-overlay {
-      flex: 1;
-    }
-    footer {
-      margin-top: auto;
-    }
-  </style>
-</head>
-<body>
-  <div class="background-overlay">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 backdrop-blur">
-      <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">Local Hands</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/frontend/screenAdmin/panelAdmin.html">Admin Panel</a></li>
-            <li class="nav-item"><a class="nav-link" href="/frontend/home.html">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/frontend/profile.html">Profile</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Título -->
-    <div class="container mt-5">
-      <h2 class="text-center text-white mb-4">User Management</h2>
-
-      <!-- Tabla de usuarios -->
-      <div class="table-responsive">
-        <table class="table table-dark table-striped text-center">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Warning</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="userTableBody">
-            <!-- JS insertará los usuarios aquí -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Modal de advertencia -->
-    <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content bg-dark text-white">
-          <div class="modal-header">
-            <h5 class="modal-title" id="warningModalLabel">Send Warning</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <textarea id="warningText" class="form-control" placeholder="Enter warning..." rows="4"></textarea>
-            <input type="hidden" id="warningUserId">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-warning" onclick="sendWarning()">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-4">
-    <div class="container">
-      <p class="mb-1">© 2025 Local Hands. All rights reserved.</p>
-      <p class="mb-0">Contact us: <a href="mailto:contact@localhands.com" class="text-white text-decoration-underline">contact@localhands.com</a></p>
-      <div class="mt-2">
-        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
-        <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- JS -->
-  <script>
-    async function fetchUsers() {
-  const res = await fetch('http://localhost:3000/api/admin/users');
-  const users = await res.json();
-
-  const tbody = document.getElementById('userTableBody');
-  tbody.innerHTML = '';
-
-  for (const user of users) {
-    const warningRes = await fetch(`http://localhost:3000/api/admin/users/${user.id}/warnings`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
       }
-    });
-    const warnings = await warningRes.json();
-    const lastWarning = warnings.length > 0 ? warnings[warnings.length - 1].message : '';
+      .background-overlay {
+        flex: 1;
+      }
+      footer {
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background-overlay">
+      <!-- Navbar -->
+      <nav
+        class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 backdrop-blur"
+      >
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold" href="#">Local Hands</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/frontend/screenAdmin/panelAdmin.html"
+                  >Admin Panel</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/frontend/home.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/frontend/profile.html">Profile</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
 
-    tbody.innerHTML += `
+      <!-- Título -->
+      <div class="container mt-5">
+        <h2 class="text-center text-white mb-4">User Management</h2>
+
+        <!-- Tabla de usuarios -->
+        <div class="table-responsive">
+          <table class="table table-dark table-striped text-center">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Warning</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <!-- JS insertará los usuarios aquí -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modal de advertencia -->
+      <div
+        class="modal fade"
+        id="warningModal"
+        tabindex="-1"
+        aria-labelledby="warningModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="warningModalLabel">Send Warning</h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <textarea
+                id="warningText"
+                class="form-control"
+                placeholder="Enter warning..."
+                rows="4"
+              ></textarea>
+              <input type="hidden" id="warningUserId" />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-warning"
+                onclick="sendWarning()"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+      <div class="container">
+        <p class="mb-1">© 2025 Local Hands. All rights reserved.</p>
+        <p class="mb-0">
+          Contact us:
+          <a
+            href="mailto:contact@localhands.com"
+            class="text-white text-decoration-underline"
+            >contact@localhands.com</a
+          >
+        </p>
+        <div class="mt-2">
+          <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-3"
+            ><i class="bi bi-instagram"></i
+          ></a>
+          <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JS -->
+    <script>
+      async function fetchUsers() {
+        const res = await fetch("http://localhost:3000/api/admin/users");
+        const users = await res.json();
+
+        const tbody = document.getElementById("userTableBody");
+        tbody.innerHTML = "";
+
+        for (const user of users) {
+          const warningRes = await fetch(
+            `http://localhost:3000/api/admin/users/${user.id}/warnings`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const warnings = await warningRes.json();
+          const lastWarning =
+            warnings.length > 0 ? warnings[warnings.length - 1].message : "";
+
+          tbody.innerHTML += `
       <tr>
         <td>${user.email}</td>
         <td>${user.role}</td>
@@ -139,58 +198,61 @@
         </td>
       </tr>
     `;
-  }
-}
+        }
+      }
 
-    const token = localStorage.getItem('adminToken'); // Asegúrate de tener el token
-    console.log('Token:', token);
-    async function deleteUser(id) {
-  if (!confirm('Are you sure you want to delete this user?')) return;
+      const token = localStorage.getItem("adminToken"); // Asegúrate de tener el token
+      console.log("Token:", token);
+      async function deleteUser(id) {
+        if (!confirm("Are you sure you want to delete this user?")) return;
 
-  const res = await fetch(`http://localhost:3000/api/admin/users/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
+        const res = await fetch(`http://localhost:3000/api/admin/users/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  if (res.ok) {
-    alert('Usuario eliminado');
-    fetchUsers();
-  } else {
-    const error = await res.json();
-    alert(`Error al eliminar usuario: ${error.error || 'Desconocido'}`);
-  }
-}
+        if (res.ok) {
+          alert("Usuario eliminado");
+          fetchUsers();
+        } else {
+          const error = await res.json();
+          alert(`Error al eliminar usuario: ${error.error || "Desconocido"}`);
+        }
+      }
 
-    function openWarningModal(userId) {
-      document.getElementById('warningUserId').value = userId;
-      document.getElementById('warningText').value = '';
-      const modal = new bootstrap.Modal(document.getElementById('warningModal'));
-      modal.show();
-    }
+      function openWarningModal(userId) {
+        document.getElementById("warningUserId").value = userId;
+        document.getElementById("warningText").value = "";
+        const modal = new bootstrap.Modal(
+          document.getElementById("warningModal")
+        );
+        modal.show();
+      }
 
-    async function sendWarning() {
-  const id = document.getElementById('warningUserId').value;
-  const text = document.getElementById('warningText').value;
-  await fetch(`http://localhost:3000/api/admin/users/${id}/warnings`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ message: text, issuedBy: 'admin' })
-  });
-  alert('Warning enviado correctamente');
-  bootstrap.Modal.getInstance(document.getElementById('warningModal')).hide();
-  fetchUsers();
-}
+      async function sendWarning() {
+        const id = document.getElementById("warningUserId").value;
+        const text = document.getElementById("warningText").value;
+        await fetch(`http://localhost:3000/api/admin/users/${id}/warnings`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ message: text, issuedBy: "admin" }),
+        });
+        alert("Warning enviado correctamente");
+        bootstrap.Modal.getInstance(
+          document.getElementById("warningModal")
+        ).hide();
+        fetchUsers();
+      }
 
+      fetchUsers();
+    </script>
 
-    fetchUsers();
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../navbar.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../navbar.js"></script>
+  </body>
 </html>
