@@ -22,10 +22,21 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
       alert(data.message);
 
       if (loginType === 'admin') {
+        // Remove any user tokens when logging in as admin
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
+
         localStorage.setItem('adminToken', data.token);
         window.location.href = '/frontend/home.html';
       } else {
+        // Remove any admin token when logging in as a regular user
+        localStorage.removeItem('adminToken');
+
         localStorage.setItem('token', data.token);
+        if (data.rol) {
+          localStorage.setItem('userRole', data.rol);
+        }
         if (data.userId) {
           localStorage.setItem('userId', data.userId);
         }
