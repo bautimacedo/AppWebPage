@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
       if (userToken && userRole === 'proveedor') {
+
+      if (adminToken) {
         const li = document.createElement('li');
         li.className = 'nav-item';
         const a = document.createElement('a');
@@ -17,6 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         li.appendChild(a);
         nav.appendChild(li);
       } else if (adminToken) {
+
+      } else if (userToken && userRole === 'proveedor') {
         const li = document.createElement('li');
         li.className = 'nav-item';
         const a = document.createElement('a');
