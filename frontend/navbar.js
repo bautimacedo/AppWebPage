@@ -4,16 +4,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const userToken = localStorage.getItem('token');
   const adminToken = localStorage.getItem('adminToken');
+  const userRole = localStorage.getItem('userRole');
 
   try {
-    if (adminToken) {
-      const res = await fetch('http://localhost:3000/admin/profile', {
-        headers: {
-          'Authorization': 'Bearer ' + adminToken,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (res.ok) {
+      if (adminToken) {
         const li = document.createElement('li');
         li.className = 'nav-item';
         const a = document.createElement('a');
@@ -22,17 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         a.textContent = 'Admin Panel';
         li.appendChild(a);
         nav.appendChild(li);
-      }
-    } else if (userToken) {
-      const res = await fetch('http://localhost:3000/profile', {
-        headers: {
-          'Authorization': 'Bearer ' + userToken,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!res.ok) return;
-      const user = await res.json();
-      if (user.rol === 'proveedor') {
+      } else if (userToken && userRole === 'proveedor') {
         const li = document.createElement('li');
         li.className = 'nav-item';
         const a = document.createElement('a');
@@ -42,7 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         li.appendChild(a);
         nav.appendChild(li);
       }
-    }
   } catch (err) {
     console.error('Error building navbar:', err);
   }

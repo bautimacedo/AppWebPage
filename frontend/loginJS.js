@@ -26,6 +26,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         window.location.href = '/frontend/home.html';
       } else {
         localStorage.setItem('token', data.token);
+        if (data.rol) {
+          localStorage.setItem('userRole', data.rol);
+        }
         if (data.userId) {
           localStorage.setItem('userId', data.userId);
         }
