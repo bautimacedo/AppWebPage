@@ -1,5 +1,6 @@
 // controllers/productController.js
 const Product = require('../models/productModel');
+const User = require('../models/userModel');
 
 exports.createProduct = async (req, res) => {
   try {
@@ -27,8 +28,13 @@ exports.createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
-  include: { model: User, attributes: ['firstName', 'lastName', 'email'] }
-  });
+      include: {
+        model: User,
+        as: 'provider',
+        attributes: ['name', 'lastname', 'email']
+      },
+      order: [['id', 'DESC']]
+    });
     res.json(products);
   } catch (error) {
     console.error('Error al obtener productos:', error);

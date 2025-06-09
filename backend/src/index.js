@@ -129,7 +129,8 @@ app.post('/login', async (req, res) => {
     res.json({
       message: `Usuario ${user.email} logueado correctamente`,
       token,
-      userId: user.id
+      userId: user.id,
+      rol: user.rol,
     });
   } catch (error) {
     console.error('Error en /login:', error);
