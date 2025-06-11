@@ -103,9 +103,7 @@
           // Generar URL segura para la imagen
           let imageUrl = "https://via.placeholder.com/150";
           if (provider.imageUrl) {
-            imageUrl = provider.imageUrl.startsWith("http")
-              ? provider.imageUrl
-              : `http://localhost:3000/uploads/${provider.imageUrl}`;
+            imageUrl = provider.imageUrl;
           }
 
           document.getElementById("providerInfo").innerHTML = `

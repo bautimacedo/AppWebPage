@@ -12,6 +12,7 @@ const User = require('./models/userModel');
 const Admin = require('./models/adminModel');
 const Product = require('./models/productModel');
 //Definimos Rutas
+const uploadRoutes = require('./routes/uploadRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -45,6 +46,7 @@ console.log('typeof adminRoutes:', typeof adminRoutes);
 
 
 // Rutas
+app.use('/api/upload', uploadRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
