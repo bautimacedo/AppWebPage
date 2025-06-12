@@ -99,6 +99,7 @@
           if (!providerRes.ok)
             throw new Error("No se pudo cargar el proveedor");
           const provider = await providerRes.json();
+          console.log("Provider recibido:", provider);
 
           // Generar URL segura para la imagen
           let imageUrl = "https://via.placeholder.com/150";

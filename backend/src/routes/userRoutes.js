@@ -23,23 +23,24 @@ router.delete('/:id', authenticateAdminToken, deleteUser);
 // Rutas para warnings del usuario
 router.get('/:id/warnings', authenticateToken, warningController.getWarningsByUser);
 
-// ✅ Ruta para subir imagen de perfil (usando imageUrl)
-  router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req, res) => {
+// ✅ Ruta para subir imagen de perfil (usando imageUrl de Cloudinary)
+router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-    // Guardamos la URL completa generada por Cloudinary
-    user.imageUrl = req.file.path;
+    user.imageUrl = req.file.secure_url || req.file.path;
+ // URL de Cloudinary
     await user.save();
 
-    res.json({ message: 'Imagen de perfil subida correctamente', image: req.file.filename });
+    res.json({ message: 'Imagen de perfil subida correctamente', imageUrl: req.file.path });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al subir la imagen de perfil' });
   }
 });
 
+// Ruta para obtener datos de un proveedor
 router.get('/seeProviders/:id', async (req, res) => {
   try {
     const provider = await User.findByPk(req.params.id, {
@@ -51,7 +52,6 @@ router.get('/seeProviders/:id', async (req, res) => {
     }
 
     res.json(provider);
-
   } catch (error) {
     console.error('Error al obtener proveedor:', error);
     res.status(500).json({ error: 'Error interno' });
