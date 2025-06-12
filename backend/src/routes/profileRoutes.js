@@ -4,7 +4,7 @@ const router = express.Router();
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const { authenticateAdminToken } = require('../middlewares/authAdminMiddleware');
 
-const upload = require('../middlewares/uploadMiddleware');
+const upload = require('../../utils/upload');
 const User = require('../models/userModel');
 const Admin = require('../models/adminModel');
 
@@ -76,7 +76,7 @@ router.put('/profile', authenticateToken, upload.single('profileImage'), async (
     }
 
     if (req.file) {
-      const imageUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+      const imageUrl = req.file.secure_url || req.file.path;
       user.imageUrl = imageUrl;
     }
 

@@ -19,7 +19,7 @@
   "homepage": "https://github.com/bautimacedo/AppWebPage#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "cloudinary": "^1.30.0",
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -28,8 +28,10 @@
     "multer": "^2.0.1",
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.14.1",
+    "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "pg-hstore": "^2.3.4",
+    "resend": "^4.5.2",
     "router": "^2.2.0",
     "sequelize": "^6.37.7"
   },
