@@ -29,8 +29,7 @@ router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req,
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-    user.imageUrl = req.file.secure_url || req.file.path;
- // URL de Cloudinary
+    user.imageUrl = req.file.secure_url || req.file.path; // URL de Cloudinary
     await user.save();
 
     res.json({ message: 'Imagen de perfil subida correctamente', imageUrl: req.file.path });

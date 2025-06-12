@@ -1,5 +1,8 @@
 const Warning = require('../models/warningModel');
 const User = require('../models/userModel');
+const resend = require('../config/emailService');
+const sendEmail = require('../config/emailService');
+
 
 const createWarning = async (req, res) => {
   const { message, issuedBy } = req.body;
@@ -10,11 +13,26 @@ const createWarning = async (req, res) => {
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
     const warning = await Warning.create({ userId, message, issuedBy }); // 👈 corregido
+    await sendEmail({
+      to: user.email,
+      subject: 'Nuevo Warning en tu cuenta',
+      html: `
+        <p>Hola ${user.name},</p>
+        <p>Se ha emitido un nuevo warning en tu cuenta:</p>
+        <p><strong>Emitido por:</strong> ${issuedBy}</p>
+        <p><strong>Mensaje:</strong> ${message}</p>
+        <p>Puedes verlo en la pestaña de Warnings.
+        Si tienes dudas, contacta con soporte. 
+        localhands@gmail.com</p>
+      `,
+    });
+    
     res.status(201).json(warning);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al crear el warning' });
   }
+
 };
 
 const getWarningsByUser = async (req, res) => {
