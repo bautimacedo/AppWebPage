@@ -238,7 +238,7 @@ app.get('/api/providers', async (req, res) => {
   try {
     const providers = await User.findAll({
       where: { rol: 'proveedor' },
-      attributes: ['name', 'lastname', 'email']
+      attributes: ['id', 'name', 'lastname', 'email', 'imageUrl']
     });
     res.json(providers);
   } catch (error) {

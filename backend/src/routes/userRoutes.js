@@ -24,12 +24,13 @@ router.delete('/:id', authenticateAdminToken, deleteUser);
 router.get('/:id/warnings', authenticateToken, warningController.getWarningsByUser);
 
 // ✅ Ruta para subir imagen de perfil (usando imageUrl)
-router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req, res) => {
+  router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-    user.imageUrl = req.file.filename; // 👈 usamos imageUrl
+    // Guardamos la URL completa generada por Cloudinary
+    user.imageUrl = req.file.path;
     await user.save();
 
     res.json({ message: 'Imagen de perfil subida correctamente', image: req.file.filename });

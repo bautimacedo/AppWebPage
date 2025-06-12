@@ -97,13 +97,16 @@
             providers.forEach((provider) => {
               const card = document.createElement("div");
               card.className = "col-md-4";
+              const image = provider.imageUrl
+                ? provider.imageUrl
+                : "https://via.placeholder.com/150";
               card.innerHTML = `
             <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
               <div class="card-body text-center">
-                <i class="bi bi-person-circle fs-1 text-info mb-3"></i>
+                <img src="${image}" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover" alt="Provider" />
                 <h5 class="card-title fw-semibold">${provider.name} ${provider.lastname}</h5>
                 <p class="card-text"><i class="bi bi-envelope-fill"></i> ${provider.email}</p>
-                <a href="#" class="btn btn-outline-info">Contact</a>
+                <a href="/frontend/seeProvider.html?id=${provider.id}" class="btn btn-outline-info">View Profile</a>
               </div>
             </div>
           `;

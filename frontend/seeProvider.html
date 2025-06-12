@@ -134,10 +134,11 @@
           products.forEach((prod) => {
             const col = document.createElement("div");
             col.className = "col-md-4";
+            const image = prod.imageUrl ? prod.imageUrl : "https://via.placeholder.com/200";
             col.innerHTML = `
             <div class="card bg-dark bg-opacity-75 text-white rounded-4 shadow h-100">
+              <img src="${image}" class="card-img-top" style="height:200px;object-fit:cover" alt="Product"/>
               <div class="card-body text-center">
-                <i class="bi bi-box-seam fs-1 text-light mb-3"></i>
                 <h5 class="card-title fw-semibold">${prod.name}</h5>
                 <p class="card-text">${prod.description || ""}</p>
                 <p class="card-text"><strong>$${prod.price}</strong></p>

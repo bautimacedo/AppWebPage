@@ -50,7 +50,8 @@ router.post('/:id/photo', authenticateToken, upload.single('photo'), async (req,
       return res.status(403).json({ error: 'No tienes permiso para modificar este producto' });
     }
 
-    product.imageUrl = req.file.filename;
+    // Guardamos la URL completa generada por Cloudinary
+    product.imageUrl = req.file.path;
     await product.save();
 
     res.json({ message: 'Imagen subida correctamente', image: req.file.filename });
