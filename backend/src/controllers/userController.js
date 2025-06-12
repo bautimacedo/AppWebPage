@@ -71,7 +71,10 @@ const updateUser = async (req, res) => {
 
 const getProviders = async (req, res) => {
   try {
-    const providers = await User.findAll({ where: { role: 'provider' } });
+    const providers = await User.findAll({
+      where: { rol: 'proveedor' },
+      attributes: ['id', 'name', 'lastname', 'email', 'imageUrl']
+    });
     const plainProviders = providers.map(p => p.get({ plain: true }));
     res.json(plainProviders);
   } catch (error) {
