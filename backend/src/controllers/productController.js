@@ -26,8 +26,14 @@ exports.createProduct = async (req, res) => {
 };
 
 const getAllProducts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 9;
+  const offset = (page - 1) * limit;
+
   try {
-    const products = await Product.findAll({
+    const { count, rows: products } = await Product.findAndCountAll({
+      limit,
+      offset,
       include: {
         model: User,
         as: 'provider',
@@ -35,12 +41,19 @@ const getAllProducts = async (req, res) => {
       },
       order: [['id', 'DESC']]
     });
-    res.json(products);
+
+    res.json({
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      products
+    });
   } catch (error) {
     console.error('Error al obtener productos:', error);
     res.status(500).json({ error: 'Error al obtener productos' });
   }
 };
+
 
 // Eliminar un producto
 const deleteProduct = async (req, res) => {

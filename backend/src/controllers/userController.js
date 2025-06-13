@@ -70,13 +70,25 @@ const updateUser = async (req, res) => {
 };
 
 const getProviders = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 9;
+  const offset = (page - 1) * limit;
+
   try {
-    const providers = await User.findAll({
+    const { count, rows } = await User.findAndCountAll({
       where: { rol: 'proveedor' },
-      attributes: ['id', 'name', 'lastname', 'email', 'imageUrl']
+      attributes: ['id', 'name', 'lastname', 'email', 'imageUrl'],
+      limit,
+      offset,
+      order: [['id', 'DESC']],
     });
-    const plainProviders = providers.map(p => p.get({ plain: true }));
-    res.json(plainProviders);
+
+    res.json({
+      providers: rows,
+      currentPage: page,
+      totalPages: Math.ceil(count / limit),
+      totalItems: count,
+    });
   } catch (error) {
     console.error("Error al obtener proveedores:", error);
     res.status(500).json({ error: "Error al obtener proveedores" });

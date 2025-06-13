@@ -66,8 +66,14 @@
 
       <!-- Tarjetas dinámicas -->
       <div class="container mt-4">
-        <div class="row justify-content-center g-4" id="providerCardsContainer">
-          <!-- Tarjetas se generan por JS -->
+        <!-- Agregar dentro de <div class="container mt-4"> -->
+        <div class="row justify-content-center g-4" id="providerCardsContainer"></div>
+
+        <!-- Controles de paginación -->
+        <div class="d-flex justify-content-center mt-4">
+          <button class="btn btn-outline-light me-2" id="prevBtn">Anterior</button>
+          <span id="pageNumber" class="align-self-center text-white mx-2"></span>
+          <button class="btn btn-outline-light ms-2" id="nextBtn">Siguiente</button>
         </div>
       </div>
     </div>
@@ -81,43 +87,61 @@
 
     <!-- Script para cargar proveedores -->
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        fetch("http://localhost:3000/api/providers")
-          .then((res) => res.json())
-          .then((providers) => {
-            const container = document.getElementById("providerCardsContainer");
-            container.innerHTML = ""; // Limpia contenido previo si lo hubiera
+  let currentPage = 1;
+  const limit = 9;
 
-            if (providers.length === 0) {
-              container.innerHTML =
-                "<p class='text-white text-center'>No providers found.</p>";
-              return;
-            }
+  async function loadProviders(page = 1) {
+    try {
+        const res = await fetch(`http://localhost:3000/api/users/providers?page=${page}&limit=${limit}`);
+      if (!res.ok) throw new Error("No se pudieron cargar los proveedores");
 
-            providers.forEach((provider) => {
-              const card = document.createElement("div");
-              card.className = "col-md-4";
-              const image = provider.imageUrl
-                ? provider.imageUrl
-                : "https://via.placeholder.com/150";
-              card.innerHTML = `
-            <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
-              <div class="card-body text-center">
-                <img src="${image}" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover" alt="Provider" />
-                <h5 class="card-title fw-semibold">${provider.name} ${provider.lastname}</h5>
-                <p class="card-text"><i class="bi bi-envelope-fill"></i> ${provider.email}</p>
-                <a href="/frontend/seeProvider.html?id=${provider.id}" class="btn btn-outline-info">View Profile</a>
-              </div>
+      const data = await res.json();
+      const providers = data.providers;
+      currentPage = data.currentPage;
+
+      const container = document.getElementById("providerCardsContainer");
+      container.innerHTML = "";
+
+      if (providers.length === 0) {
+        container.innerHTML = "<p class='text-white text-center'>No providers found.</p>";
+        return;
+      }
+
+      providers.forEach((provider) => {
+        const card = document.createElement("div");
+        card.className = "col-md-4";
+        const image = provider.imageUrl || "https://via.placeholder.com/150";
+        card.innerHTML = `
+          <div class="card text-white bg-dark bg-opacity-50 rounded-4 shadow h-100">
+            <div class="card-body text-center">
+              <img src="${image}" class="rounded-circle mb-3" style="width:100px;height:100px;object-fit:cover" alt="Provider" />
+              <h5 class="card-title fw-semibold">${provider.name} ${provider.lastname}</h5>
+              <p class="card-text"><i class="bi bi-envelope-fill"></i> ${provider.email}</p>
+              <a href="/frontend/seeProvider.html?id=${provider.id}" class="btn btn-outline-info">View Profile</a>
             </div>
-          `;
-              container.appendChild(card);
-            });
-          })
-          .catch((error) => {
-            console.error("Error loading providers:", error);
-          });
+          </div>
+        `;
+        container.appendChild(card);
       });
-    </script>
+
+      document.getElementById("pageNumber").textContent = `Página ${data.currentPage} de ${data.totalPages}`;
+      document.getElementById("prevBtn").disabled = data.currentPage === 1;
+      document.getElementById("nextBtn").disabled = data.currentPage === data.totalPages;
+    } catch (err) {
+      console.error("Error loading providers:", err);
+    }
+  }
+
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    if (currentPage > 1) loadProviders(currentPage - 1);
+  });
+
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    loadProviders(currentPage + 1);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => loadProviders());
+</script>
 
     <!-- Modal de contacto -->
     <div id="contactModal" class="modal-contact d-none">

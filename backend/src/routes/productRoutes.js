@@ -71,16 +71,27 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const products = await Product.findAll({
-      where: whereClause,
-      include: [{
-        model: User,
-        as: 'provider',
-        attributes: ['id', 'name']
-      }],
-      order: [['id', 'DESC']],
-    });
-    res.json(products);
+      const limit = parseInt(req.query.limit) || 9;
+      const page = parseInt(req.query.page) || 1;
+      const offset = (page - 1) * limit;
+
+      const { count, rows } = await Product.findAndCountAll({
+        where: whereClause,
+        include: [{
+          model: User,
+          as: 'provider',
+          attributes: ['id', 'name']
+        }],
+        order: [['id', 'DESC']],
+        limit,
+        offset,
+      });
+
+      res.json({
+        products: rows,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+      });
   } catch (error) {
     console.error('Error al obtener productos:', error);
     res.status(500).json({ error: 'Error al obtener productos' });
