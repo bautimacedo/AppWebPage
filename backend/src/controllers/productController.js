@@ -25,6 +25,33 @@ exports.createProduct = async (req, res) => {
   }
 };
 
+const getPaginatedProductsByProvider = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await Product.findAndCountAll({
+      where: { userId },
+      limit,
+      offset,
+      order: [['createdat', 'DESC']]
+    });
+
+    res.json({
+      products: rows,
+      currentPage: page,
+      totalPages: Math.ceil(count / limit),
+      totalItems: count
+    });
+  } catch (error) {
+    console.error("Error al obtener productos paginados:", error);
+    res.status(500).json({ error: "Error al obtener productos paginados" });
+  }
+};
+
+
 const getAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 9;
@@ -46,7 +73,7 @@ const getAllProducts = async (req, res) => {
       totalItems: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
-      products
+      products: rows
     });
   } catch (error) {
     console.error('Error al obtener productos:', error);
@@ -73,5 +100,6 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getAllProducts,
-  deleteProduct
+  deleteProduct,
+  getPaginatedProductsByProvider,
 };

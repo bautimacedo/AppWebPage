@@ -4,6 +4,7 @@ const Product = require('../models/productModel');
 const User = require('../models/userModel');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const upload = require('../../utils/upload'); // Para manejar multipart/form-data
+const { getPaginatedProductsByProvider } = require('../controllers/productController');
 
 // Crear un nuevo producto (datos sin imagen)
 router.post('/', authenticateToken, upload.none(), async (req, res) => {
@@ -100,32 +101,7 @@ router.get('/', async (req, res) => {
 
 
 // Obtener productos del proveedor logueado
-router.get('/my-products', authenticateToken, async (req, res) => {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    return res.status(401).json({ error: 'Usuario no autenticado' });
-  }
-
-  try {
-    const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-
-    if (user.rol !== 'proveedor') {
-      return res.status(403).json({ error: 'Solo proveedores pueden ver sus productos' });
-    }
-
-    const products = await Product.findAll({
-      where: { userId },
-      order: [['id', 'DESC']],
-    });
-
-    res.json(products);
-  } catch (error) {
-    console.error('Error al obtener productos del proveedor:', error);
-    res.status(500).json({ error: 'Error al obtener productos del proveedor' });
-  }
-});
+router.get('/my-products', authenticateToken, getPaginatedProductsByProvider);
 
 // Obtener un producto por ID
 // Obtener un producto por ID (con su proveedor)
