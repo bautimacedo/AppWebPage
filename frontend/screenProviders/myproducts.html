@@ -118,9 +118,9 @@
           });
 
           if (!res.ok) {
-            throw new Error(error.error || "Error al cargar productos");
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error || "Error al cargar productos");
           }
-
           const data = await res.json();
           const products = data.products;
 

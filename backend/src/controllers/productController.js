@@ -73,7 +73,7 @@ const getAllProducts = async (req, res) => {
       totalItems: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
-      products: rows
+      products
     });
   } catch (error) {
     console.error('Error al obtener productos:', error);
