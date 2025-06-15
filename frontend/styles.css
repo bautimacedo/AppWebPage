@@ -1,3 +1,14 @@
+/* Paleta de colores y fuentes */
+:root {
+    --primary: #6c63ff;
+    --dark-bg: rgba(0, 0, 0, 0.6);
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --card-hover: rgba(255, 255, 255, 0.2);
+    --text-light: #f3f0eb;
+    --text-dark: #343a40;
+    --font-main: 'Poppins', sans-serif;
+}
+
 /* Fondo con la imagen */
 html,
 body {
@@ -8,42 +19,50 @@ body {
     background-position: center;
     background-attachment: fixed;
     overflow-x: hidden;
-    font-family: 'Poppins', sans-serif;
-    color: #f3f0eb;
+    font-family: var(--font-main);
+    color: var(--text-light);
+}
+
+/* Capa oscura para mayor contraste */
+.background-overlay {
+    background-color: var(--dark-bg);
+    min-height: 100vh;
 }
 
 /* Títulos */
 h1,
 h2,
 h4 {
-    color: #f3f0eb;
+    color: var(--text-light);
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* Inputs */
 input,
-textarea {
-    background-color: #fff;
+textarea,
+.form-control {
+    background-color: var(--light, #fff);
     border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 0.5rem;
+    padding: 0.6rem;
     width: 100%;
     font-size: 1rem;
     margin-bottom: 20px;
-    color: #3E2C1C;
+    color: var(--text-dark);
 }
 
 input:focus,
-textarea:focus {
-    border-color: #3E2C1C;
+textarea:focus,
+.form-control:focus {
+    border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 8px rgba(62, 44, 28, 0.3);
+    box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25);
 }
 
 /* Botón de login */
 .btn-login,
 .btn-custom {
-    background-color: #3E2C1C;
+    background-color: var(--primary);
     color: white;
     border: none;
     padding: 12px;
@@ -56,31 +75,31 @@ textarea:focus {
 
 .btn-login:hover,
 .btn-custom:hover {
-    background-color: #6c4c30;
+    background-color: #574de9;
 }
 
 /* Botones outline personalizados */
 .btn-outline-primary:hover {
-    background-color: #7a634e;
+    background-color: var(--primary);
     color: white;
-    border-color: #7a634e;
+    border-color: var(--primary);
 }
 
 .btn-outline-warning:hover {
-    background-color: #a1835a;
-    color: white;
-    border-color: #a1835a;
+    background-color: #ffc107;
+    color: #212529;
+    border-color: #ffc107;
 }
 
 .btn-outline-danger:hover {
-    background-color: #a0522d;
+    background-color: #dc3545;
     color: white;
-    border-color: #a0522d;
+    border-color: #dc3545;
 }
 
 /* Logo */
 .logo-login {
-    margin-top: 10%;
+    margin-top: 5%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -91,37 +110,38 @@ textarea:focus {
 /* Enlaces de login */
 .forgotpassword-login,
 .register-login {
-    color: #f3f0eb;
+    color: var(--text-light);
     font-size: 0.9rem;
 }
 
 .forgotpassword-login {
-    margin-top: -6%;
-    margin-left: 50%;
+    margin-top: 1rem;
+    text-align: right;
 }
 
 .register-login {
-    margin-top: -2%;
-    margin-left: 20%;
+    margin-top: 1rem;
+    text-align: center;
 }
 
 /* Tarjetas */
 .card {
     border: none;
-    background: rgba(62, 44, 28, 0.4);
+    background: var(--card-bg);
     backdrop-filter: blur(8px);
     border-radius: 1rem;
     transition: transform 0.3s ease, box-shadow 0.4s ease, background-color 0.4s ease;
-    box-shadow: 0 4px 15px rgba(62, 44, 28, 0.2);
-    color: #f3f0eb;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: var(--text-light);
+    animation: fadeIn 0.6s ease both;
 }
 
 /* Hover tarjeta */
 .card:hover,
 .card:focus-within {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 30px rgba(122, 99, 78, 0.8);
-    background: rgba(122, 99, 78, 0.7);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    background: var(--card-hover);
     backdrop-filter: blur(10px);
 }
 
@@ -189,37 +209,47 @@ textarea:focus {
 
 /* Modal contenido */
 .modal-content-contact {
-    background: rgba(62, 44, 28, 0.95);
+    background: var(--card-bg);
     color: white;
     width: 90%;
     max-width: 420px;
-    box-shadow: 0 0 20px rgba(122, 99, 78, 0.8);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border-radius: 1rem;
 }
 
 /* Inputs del modal */
 .modal-content-contact input,
 .modal-content-contact textarea {
-    background-color: #5a4531;
+    background-color: rgba(255, 255, 255, 0.8);
     border: none;
-    color: white;
+    color: #212529;
     border-radius: 0.5rem;
 }
 
 .modal-content-contact input::placeholder,
 .modal-content-contact textarea::placeholder {
-    color: #cfc5b1;
+    color: #6c757d;
 }
 
 .modal-content-contact input:focus,
 .modal-content-contact textarea:focus {
-    background-color: #7a634e;
-    color: white;
+    background-color: #fff;
+    color: #212529;
     outline: none;
-    box-shadow: 0 0 8px #c49a5b;
+    box-shadow: 0 0 0 0.25rem rgba(108, 99, 255, 0.25);
 }
 
 /* Ocultar elementos */
 .d-none {
     display: none !important;
+}
+
+/* Animación suave para elementos */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease both;
 }
