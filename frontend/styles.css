@@ -1,7 +1,7 @@
 /* Paleta de colores y fuentes */
 :root {
     --primary: #6c63ff;
-    --dark-bg: rgba(0, 0, 0, 0.6);
+    --dark-bg: #19120B;
     --card-bg: rgba(255, 255, 255, 0.1);
     --card-hover: rgba(255, 255, 255, 0.2);
     --text-light: #f3f0eb;
