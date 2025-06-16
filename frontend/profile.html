@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -189,7 +189,7 @@
           window.location.href = "/frontend/home.html";
         });
 
-        // Mostrar vista previa imagen
+        // Mostrar vista previa imagen al seleccionar archivo
         profileImageInput.addEventListener("change", () => {
           const file = profileImageInput.files[0];
           if (file) {
@@ -221,15 +221,18 @@
           locationInput.value = user.location || "";
           bioInput.value = user.description || "";
 
-          if (user.profileImageUrl) {
-            imagePreview.src = user.profileImageUrl;
+          if (user.imageUrl) {
+            imagePreview.src = user.imageUrl;
             imagePreview.style.display = "block";
+          } else {
+            imagePreview.src = "";
+            imagePreview.style.display = "none";
           }
         } catch (error) {
           console.error("Error cargando perfil:", error);
         }
 
-        // Enviar formulario con JSON + imagen base64 si existe
+        // Enviar formulario con FormData (incluye imagen)
         document
           .getElementById("profileForm")
           .addEventListener("submit", async (e) => {
@@ -260,7 +263,7 @@
 
               alert("Perfil actualizado correctamente");
 
-              // Recargar datos del perfil para actualizar preview sin recargar toda la página
+              // Recargar imagen de perfil con la nueva URL del backend
               const updatedUser = await res.json();
               if (updatedUser.user.imageUrl) {
                 imagePreview.src = updatedUser.user.imageUrl;

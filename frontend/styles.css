@@ -71,6 +71,7 @@ textarea:focus,
     cursor: pointer;
     transition: background-color 0.3s ease;
     border-radius: 0.5rem;
+    background-color: #3E2C1C;
 }
 
 .btn-login:hover,
