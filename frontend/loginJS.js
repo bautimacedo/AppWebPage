@@ -22,9 +22,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
       alert(data.message);
 
       if (loginType === 'admin') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
         localStorage.setItem('adminToken', data.token);
         window.location.href = '/frontend/home.html';
       } else {
+        localStorage.removeItem('adminToken');
         localStorage.setItem('token', data.token);
         if (data.rol) {
           localStorage.setItem('userRole', data.rol);
