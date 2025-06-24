@@ -89,7 +89,8 @@
             "Content-Type": "application/json",
           },
         });
-        const productos = await res.json();
+        const data = await res.json();
+        const productos = data.products || [];
         const container = document.getElementById("productosContainer");
         container.innerHTML = "";
 
@@ -104,10 +105,10 @@
           <h5>${prod.name}</h5>
           <p><strong>Precio:</strong> $${prod.price}</p>
           <p><strong>Descripción:</strong> ${prod.description}</p>
-          <p><strong>Usuario:</strong> ${prod.User?.firstName || ""} ${
-            prod.User?.lastName || ""
+          <p><strong>Usuario:</strong> ${prod.provider?.name || ""} ${
+            prod.provider?.lastname || ""
           }</p>
-          <p><strong>Email:</strong> ${prod.User?.email || "N/A"}</p>
+          <p><strong>Email:</strong> ${prod.provider?.email || "N/A"}</p>
           <button class="btn btn-danger" onclick="eliminarProducto(${
             prod.id
           })">Eliminar</button>
