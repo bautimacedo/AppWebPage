@@ -155,7 +155,7 @@
       document
         .getElementById("downloadBackupBtn")
         .addEventListener("click", async () => {
-          const token = localStorage.getItem("token");
+          const token = localStorage.getItem("adminToken");
 
           if (!token) {
             alert("No estás autenticado como administrador");
