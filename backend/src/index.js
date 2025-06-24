@@ -34,6 +34,7 @@ const PORT = 3000; // http://localhost:3000
 const { authenticateToken } = require('./middlewares/authMiddleware'); // Importa tu middleware de auth
 const { authenticateAdminToken } = require('./middlewares/authAdminMiddleware');
 
+bcrypt.hash('admin123', 10).then(console.log); // Hash de ejemplo para la contraseña del admin
 
 const authAdminMiddleware = require('./middlewares/authAdminMiddleware');
 console.log('authAdminMiddleware:', authAdminMiddleware);

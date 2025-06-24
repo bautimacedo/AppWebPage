@@ -51,6 +51,8 @@ router.get('/admin/profile', authenticateAdminToken, async (req, res) => {
 
 // Actualizar perfil del usuario autenticado
 router.put('/profile', authenticateToken, upload.single('profileImage'), async (req, res) => {
+  console.log('Entró al controlador PUT /profile');  // <-- Para confirmar que llegó
+  console.log('req.file:', req.file);
   try {
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -75,7 +77,7 @@ router.put('/profile', authenticateToken, upload.single('profileImage'), async (
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
-
+    console.log('req.file:', JSON.stringify(req.file, null, 2));
     if (req.file) {
       // Cloudinary u otro sistema puede devolver secure_url o path
       const imageUrl = req.file.secure_url || req.file.path;
