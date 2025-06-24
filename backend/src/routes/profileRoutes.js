@@ -77,7 +77,6 @@ router.put('/profile', authenticateToken, upload.single('profileImage'), async (
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
-    console.log('req.file:', JSON.stringify(req.file, null, 2));
     if (req.file) {
       // Cloudinary u otro sistema puede devolver secure_url o path
       const imageUrl = req.file.secure_url || req.file.path;

@@ -20,14 +20,6 @@ const profileRoutes = require('./routes/profileRoutes');
 const path = require('path');
 
 
-console.log('adminRoutes es router?', typeof adminRoutes === 'function');
-console.log('adminRoutes:', adminRoutes);
-
-console.log('Cloudinary config:');
-console.log(process.env.CLOUDINARY_CLOUD_NAME);
-console.log(process.env.CLOUDINARY_API_KEY);
-console.log(process.env.CLOUDINARY_API_SECRET);
-
 
 const PORT = 3000; // http://localhost:3000
 
@@ -37,7 +29,6 @@ const { authenticateAdminToken } = require('./middlewares/authAdminMiddleware');
 bcrypt.hash('admin123', 10).then(console.log); // Hash de ejemplo para la contraseña del admin
 
 const authAdminMiddleware = require('./middlewares/authAdminMiddleware');
-console.log('authAdminMiddleware:', authAdminMiddleware);
 
 // Middlewares
 app.use(express.json({ limit: '100mb' })); // Aumenta el límite de tamaño del cuerpo a 10mb
@@ -51,13 +42,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
-
-console.log('authenticateAdminToken es función?', typeof authenticateAdminToken === 'function');
-console.log('adminRoutes es router?', typeof adminRoutes === 'function');
-
-console.log('adminRoutes:', adminRoutes);
-console.log('typeof adminRoutes:', typeof adminRoutes);
-
 
 // Rutas
 app.use('/api/upload', uploadRoutes);
