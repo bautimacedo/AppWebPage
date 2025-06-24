@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userRole = localStorage.getItem('userRole');
 
   try {
-      if (adminToken) {
+      if (adminToken && userToken == null) {
         const li = document.createElement('li');
         li.className = 'nav-item';
         const a = document.createElement('a');
